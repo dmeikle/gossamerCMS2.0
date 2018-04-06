@@ -24,7 +24,9 @@ class JSONView extends AbstractView
 {
 
     public function render($data = array()) {
-
+        if(is_null($data)) {
+            $data = array();
+        }
         if(!is_null($this->httpResponse->getAttribute('FORM_SECURITY_TOKEN'))) {
             $data['FORM-SECURITY-TOKEN'] = $this->httpResponse->getAttribute('FORM_SECURITY_TOKEN');
             $this->httpResponse->removeAttribute('FORM_SECURITY_TOKEN');
