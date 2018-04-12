@@ -29,7 +29,7 @@ class SaveCachedResultFilter extends AbstractFilter
 {
     use \Gossamer\Core\Configuration\Traits\LoadConfigurationTrait;
 
-    /**
+    /** 
      * @param HttpRequest &$request
      * @param HttpInterface $response
      * @param FilterChain $chain

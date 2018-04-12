@@ -3,7 +3,8 @@
 
 namespace Gossamer\Horus\EventListeners;
 
-use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\HttpRequest;
+use Gossamer\Horus\Http\HttpResponse;
 use Monolog\Logger;
 use Gossamer\Horus\Core\Request;
 use Gossamer\Pesedget\Database\DatasourceFactory;

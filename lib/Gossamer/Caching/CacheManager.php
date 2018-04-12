@@ -3,7 +3,8 @@
 namespace Gossamer\Caching;
 
 use Gossamer\Caching\CachingInterface;
-//use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+//use Gossamer\Horus\Http\HttpRequest;
+// //use Gossamer\Horus\Http\HttpResponse;
 use Monolog\Logger;
 use Gossamer\Caching\Exceptions\FileNotFoundException;
 use Gossamer\Caching\Exceptions\IOException;

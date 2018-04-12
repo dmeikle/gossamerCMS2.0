@@ -26,4 +26,6 @@ class HttpResponse extends Response
     public function getHeaders() {
         return $this->headers;
     }
+
+    
 }

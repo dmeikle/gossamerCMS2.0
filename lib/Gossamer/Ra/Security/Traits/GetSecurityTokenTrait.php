@@ -18,7 +18,7 @@
 namespace Gossamer\Ra\Security\Traits;
 
 
-use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\HttpRequest; 
 use Gossamer\Ra\Security\Client;
 use Gossamer\Ra\Security\SecurityToken;
 

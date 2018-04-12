@@ -32,7 +32,7 @@ abstract class Response implements HttpInterface
     public function getAttributes() {
         return $this->attributes;
     }
-
+ 
     public function setHeader($key, $value) {
         $this->headers[] = "$key: $value";
     }

@@ -20,7 +20,8 @@ namespace Gossamer\Core\Components\BreadCrumbs\Filters;
 
 use Gossamer\Horus\Filters\AbstractFilter;
 use Gossamer\Horus\Filters\FilterChain;
-use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\HttpRequest;
+use Gossamer\Horus\Http\HttpResponse;
 
 class BreadCrumbsFilter extends AbstractFilter
 {

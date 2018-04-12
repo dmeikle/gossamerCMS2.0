@@ -18,7 +18,8 @@
 namespace Gossamer\Horus\Filters;
 
 
-use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\HttpRequest;
+use Gossamer\Horus\Http\HttpResponse; 
 
 class ListAllFilter extends AbstractFilter
 {

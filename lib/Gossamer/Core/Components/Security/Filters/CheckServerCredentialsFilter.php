@@ -19,12 +19,12 @@ namespace Gossamer\Core\Components\Security\Filters;
 
 
 use components\security\documents\ServerAuthenticationToken;
-use Gossamer\Caching\CacheManager;
+
 use Gossamer\Core\Components\Security\Exceptions\InvalidServerIDException;
 use Gossamer\Core\Components\Security\Exceptions\UnauthorizedAccessException;
 use Gossamer\Horus\Filters\AbstractFilter;
 use Gossamer\Horus\Filters\FilterChain;
-use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\HttpResponse;
 use Gossamer\Horus\Http\HttpRequest;
 
 class CheckServerCredentialsFilter extends AbstractFilter

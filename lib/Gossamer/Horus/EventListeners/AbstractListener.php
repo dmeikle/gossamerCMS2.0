@@ -4,7 +4,8 @@ namespace Gossamer\Horus\EventListeners;
 
 use Detection\MobileDetect;
 use Gossamer\Caching\CacheManager;
-use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\HttpRequest;
+use Gossamer\Horus\Http\HttpResponse;
 use Monolog\Logger;
 use Gossamer\Pesedget\Database\DatasourceFactory;
 use Gossamer\Set\Utils\Container;

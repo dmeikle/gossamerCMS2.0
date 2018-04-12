@@ -20,7 +20,8 @@ namespace Gossamer\Ra\Security\Filters;
 
 use Gossamer\Horus\Filters\AbstractFilter;
 use Gossamer\Horus\Filters\FilterChain;
-use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\HttpRequest;
+use Gossamer\Horus\Http\HttpResponse;
 use Gossamer\Ra\Exceptions\InvalidFormTokenException;
 use Gossamer\Ra\Security\FormToken;
 use Gossamer\Ra\Security\Traits\FormTokenTrait;

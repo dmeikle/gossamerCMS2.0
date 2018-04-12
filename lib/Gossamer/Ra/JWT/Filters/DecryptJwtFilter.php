@@ -21,7 +21,8 @@ namespace Gossamer\Ra\JWT\Filters;
 use Gossamer\Essentials\Configuration\Exceptions\KeyNotSetException;
 use Gossamer\Horus\Filters\AbstractFilter;
 use Gossamer\Horus\Filters\FilterChain;
-use Gossamer\Horus\Http\HttpRequest; use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\HttpRequest;
+use Gossamer\Horus\Http\HttpResponse;
 use Gossamer\Ra\Exceptions\TokenExpiredException;
 use Gossamer\Ra\JWT\TokenManager;
 
