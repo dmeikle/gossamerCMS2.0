@@ -28,12 +28,12 @@ class SaveCommand extends AbstractCommand
 
     public function execute($params = array(), $requestParams = array())
     { 
-        //file_put_contents(__DEBUG_OUTPUT_PATH, "params\r\n". print_r($requestParams, true), FILE_APPEND);
+        file_put_contents(__DEBUG_OUTPUT_PATH, "params\r\n". print_r($requestParams, true), FILE_APPEND);
         
         $this->prepare($this->entity, $requestParams);
         $this->populateDocument($this->entity, $requestParams);
          
-        //file_put_contents(__DEBUG_OUTPUT_PATH,  "entity\r\n".print_r($this->entity->toArray(), true), FILE_APPEND);
+        file_put_contents(__DEBUG_OUTPUT_PATH,  "entity\r\n".print_r($this->entity->toArray(), true), FILE_APPEND);
         $id = $requestParams['id'];
         $this->getBucket($this->entity)->upsert($id, $this->entity->toArray());
         $result = $this->getBucket()->get($id);

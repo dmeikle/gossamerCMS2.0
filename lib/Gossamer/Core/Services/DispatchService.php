@@ -31,7 +31,7 @@ class DispatchService extends AbstractService
         $dispatcher = new EventDispatcher($this->logger, $this->httpRequest,$this->httpResponse,$this->httpRequest->getMethod(), $this->httpRequest->getYmlKey(), $this->getBootstrapConfig());
 
         $dispatcher->setContainer($container);
-        $dispatcher->setDatasources(new DatasourceFactory(), $this->getDatasourceConfig());
+        $dispatcher->setDatasources(new DatasourceFactory($this->httpRequest), $this->getDatasourceConfig());
         $dispatcher->setConfiguration($this->getBootstrapConfig(), 'all');
 
         return $dispatcher;

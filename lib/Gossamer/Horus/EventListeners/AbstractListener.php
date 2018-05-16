@@ -4,6 +4,7 @@ namespace Gossamer\Horus\EventListeners;
 
 use Detection\MobileDetect;
 use Gossamer\Caching\CacheManager;
+use Gossamer\Core\MVC\AbstractModel;
 use Gossamer\Horus\Http\HttpRequest;
 use Gossamer\Horus\Http\HttpResponse;
 use Monolog\Logger;
@@ -119,13 +120,17 @@ class AbstractListener
      *
      * @return datasource
      */
-    protected function getDatasource(ListenerAccessibleInterface $modelName) {
+    protected function getDatasource($datasourceName, AbstractModel $model) {
 
         /**
          * CP-251 - added multiple datasources to a single function. Need to check
          * for requested modelName before defaulting to datasourceKey which is
          * specified in default routing config.
          */
+        /**
+         * new version of framework requires datasource specified in listener config.
+         * all calls will pass a string. Datasource must be specified in credentials file
+
         if (is_object($modelName) && array_key_exists($modelName->getTablename(), $this->datasources)) {
             $datasource = $this->datasourceFactory->getDatasource($this->datasources[$modelName->getTablename()], $this->logger);
             $datasource->setDatasourceKey($this->datasources[$modelName->getTablename()]);
@@ -137,8 +142,9 @@ class AbstractListener
             $datasource->setDatasourceKey($this->datasourceKey);
         } else {
             throw new \Exception($modelName . ' datasource key missing from listeners configuration');
-        }
-
+        }*/
+        $datasource = $this->datasourceFactory->getDatasource($datasourceName, $this->logger);
+     
         return $datasource;
     }
 

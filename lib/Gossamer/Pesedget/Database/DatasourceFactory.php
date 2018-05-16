@@ -11,6 +11,8 @@
 
 namespace Gossamer\Pesedget\Database;
 
+use Gossamer\Core\Configuration\Traits\LoadConfigurationTrait;
+use Gossamer\Horus\Http\HttpRequest;
 use Monolog\Logger;
 use Gossamer\Essentials\Configuration\YamlLoader;
 
@@ -20,6 +22,14 @@ use Gossamer\Essentials\Configuration\YamlLoader;
  * 
  */
 class DatasourceFactory {
+
+    use LoadConfigurationTrait;
+
+    private $httpRequest;
+
+    public function __construct(HttpRequest $httpRequest) {
+        $this->httpRequest = $httpRequest;
+    }
 
     private $datasources = null;
 
@@ -71,19 +81,13 @@ class DatasourceFactory {
      * @return \core\datasources\datasourceClass
      */
     private function buildDatasourceInstance($sourceName, Logger $logger) {
-        $parser = new YamlLoader($logger);
-        $ymlFilePath = __SITE_PATH . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'credentials.yml';
-        $parser->setFilePath($ymlFilePath);
-        $dsConfig = $parser->loadConfig();
-        $sourceName = trim($sourceName, "<br>");
 
-        $datasourceClass = $dsConfig['database'][$sourceName]['class'];
+        $dsConfig = $this->loadConfig($this->httpRequest->getSiteParams()->getConfigPath() . 'credentials.yml');
 
-        $datasource = new $datasourceClass($dsConfig['database'][$sourceName]['credentials']);
-        $datasource->setLogger($logger);
-   
-        unset($parser);
-        
+        $datasourceClass = $dsConfig[$sourceName]['class'];
+
+        $datasource = new $datasourceClass($dsConfig[$sourceName]['credentials']);
+
         return $datasource;
     }
 

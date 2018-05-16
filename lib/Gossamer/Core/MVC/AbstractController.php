@@ -106,6 +106,16 @@ abstract class AbstractController
      */
     public function listall($offset = 0, $limit = 50) {
         $params = $this->httpRequest->getRequestParams()->getQueryStringParameters();
+
+       // ?orderby=category&direction=asc&directive::OFFSET=0&directive::LIMIT=10&directive::ORDER_BY=id&directive::DIRECTION=desc
+        if(array_key_exists('orderby', $params)) {
+            $params['directive::ORDER_BY'] = $params['orderby'];
+            unset($params['orderby']);
+        }
+        if(array_key_exists('direction', $params)) {
+            $params['directive::DIRECTION'] = $params['direction'];
+            unset($params['direction']);
+        }
         $result = $this->model->listall($offset, $limit, null, $params);
 
         if (is_array($result) && array_key_exists($this->model->getEntity() . 'sCount', $result)) {
@@ -149,7 +159,14 @@ abstract class AbstractController
         $params = $this->httpRequest->getRequestParams()->getQueryStringParameters();
         $params['directive::OFFSET'] = $offset;
         $params['directive::LIMIT'] = $limit;
-
+        if(array_key_exists('orderby', $params)) {
+            $params['directive::ORDER_BY'] = $params['orderby'];
+            unset($params['orderby']);
+        }
+        if(array_key_exists('direction', $params)) {
+            $params['directive::DIRECTION'] = $params['direction'];
+            unset($params['direction']);
+        }
         $result = $this->model->listallReverse($offset, $limit, null, $params);
      
 

@@ -47,10 +47,11 @@ trait BucketTrait
     protected function getConnection($key = null) {
 
         if (!is_null($key)) {
-            return $this->entityManager->getConnection($key);
+            return $this->getEntityManager()->getConnection($key);
         }
+        $key = $this->httpRequest->getNodeConfig()['datasource'];
 
-        return $this->entityManager->getConnection($this->httpRequest->getNodeConfig()['datasource']);
+        return $this->getEntityManager()->getConnection($key);
     }
 
 

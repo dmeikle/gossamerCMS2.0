@@ -101,9 +101,9 @@ class SearchCommand extends ListCommand
             $this->getFilter($params) . $this->getOrderBy($params, 'id') .
             $this->getLimit($params);
 
+     
         $query = \CouchbaseN1qlQuery::fromString($queryString);
         $rows = $connection->getBucket()->query($query);
-
 
         return array(
             $this->entity->getIdentityField() => $this->removeRowHeadings($this->resultsToArray($rows, false, $this->isCustomQuery())),

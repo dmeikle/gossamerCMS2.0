@@ -40,7 +40,7 @@ trait GetLoggedInMemberTrait {
                 error_log('warning: DEBUG MODE IS SET TO TRUE IN CONFIG.YML');
                 return new Client(array(
                     'ipAddress' => 'localhost',
-                    'id' => 'debug::id',
+                    'id' => 'cartclients::102',
                     'email' => 'debugmodeistrue@test.com',
                     'memberID' => 'BB0044',
                     'memberPrefix' => 'CV'

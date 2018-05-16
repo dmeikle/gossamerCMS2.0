@@ -152,9 +152,9 @@ abstract class AbstractModel
      *
      * @return type
      */
-    public function save(array $params) {
+    public function save(array $params, $customVerb = null) {
 
-        $data = $this->getDatasource()->query(self::METHOD_POST, $this, self::VERB_SAVE, $params);
+        $data = $this->getDatasource()->query(self::METHOD_POST, $this, (is_null($customVerb)? self::VERB_SAVE : $customVerb), $params);
 
         return $data;
     }

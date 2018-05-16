@@ -100,7 +100,6 @@ class AbstractFilter
 */
     public function execute(HttpRequest &$request, HttpResponse &$response, FilterChain &$chain) {
         try {
-
             $chain->execute($request, $response, $chain);
         } catch (\Exception $e) {
  
