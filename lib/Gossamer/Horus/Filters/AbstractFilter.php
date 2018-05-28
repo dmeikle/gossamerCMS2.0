@@ -100,9 +100,16 @@ class AbstractFilter
 */
     public function execute(HttpRequest &$request, HttpResponse &$response, FilterChain &$chain) {
         try {
-            $chain->execute($request, $response, $chain);
+            $value = $chain->execute($request, $response, $chain);
         } catch (\Exception $e) {
  
         }
+    }
+
+    protected function setException(array $result) {
+        $this->httpResponse->setAttribute(FilterChain::IMMEDIATE_WRITE, 'true');
+
+        $this->httpResponse->setHeader('Content-Type', 'application/json');
+        $this->httpResponse->setAttribute('data',json_encode($result));
     }
 }

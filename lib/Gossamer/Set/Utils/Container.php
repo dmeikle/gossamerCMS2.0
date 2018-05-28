@@ -66,4 +66,8 @@ class Container
     public function set($key, &$object) {
         $this->directory[$key] = $object;
     }
+
+    public function getKeys() {
+        return array_keys($this->directory);
+    }
 }

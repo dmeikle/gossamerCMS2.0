@@ -268,7 +268,12 @@ class RequestParams
      * @param mixed $querystring
      * @return RequestParams
      */
-    public function setQuerystring($querystring) {
+    public function setQuerystring($querystring, $override = false) {
+        if($override) {
+            $this->querystring = $querystring;
+
+            return $this;
+        }
 
         $this->setUri(key($querystring));
         array_shift($querystring);

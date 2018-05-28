@@ -31,13 +31,14 @@ class KernelRunner implements KernelRunnerInterface
     private $container;
     
     public function __construct(HttpRequest &$httpRequest, HttpResponse &$httpResponse, Container $container) {
+       
         $this->httpRequest = $httpRequest;
         $this->httpResponse = $httpResponse;
         $this->container = $container;
     }
 
     public function execute(array $nodeConfig) {
-        
+
         $componentName = $nodeConfig[$this->httpRequest->getRequestParams()->getYmlKey()]['defaults']['component'];
         $controllerName = $nodeConfig[$this->httpRequest->getRequestParams()->getYmlKey()]['defaults']['controller'];
         $modelName = $nodeConfig[$this->httpRequest->getRequestParams()->getYmlKey()]['defaults']['model'];

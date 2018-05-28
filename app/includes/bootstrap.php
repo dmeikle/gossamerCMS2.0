@@ -21,7 +21,8 @@ $bootStrapLoader = new \Gossamer\Core\Kernel\BootstrapLoader();
 
 //request is for all parameters needed to complete the request
 $httpRequest = new \Gossamer\Horus\Http\HttpRequest($bootStrapLoader->getRequestParams(), $siteParams);
-//$httpRequest = new extensions\aset\http\HttpAsetRequest($bootStrapLoader->getRequestParams(),$siteParams);
+//can't use this here - we need to determine our yml key first
+//$httpRequest = new Gossamer\Aset\Http\AsetHttpRequest($bootStrapLoader->getRequestParams(),$siteParams);
 
 $entityManager = $bootStrapLoader->getEntityManager($httpRequest->getSiteParams()->getConfigPath());
 $container->set('EntityManager', $entityManager);
@@ -49,6 +50,8 @@ $filterService->setContainer($container);
 
 //execute any entrypoint filters
 runFilters($siteParams->getConfigPath() . 'filters.yml', 'all',\Gossamer\Horus\Filters\FilterEvents::FILTER_ENTRY_POINT);
+
+//check for immediate write here rather that in the filterchain - I don't like to see calls to write and exit buried deep within the code
 if(!is_null($httpResponse->getAttribute(\Gossamer\Horus\Filters\FilterChain::IMMEDIATE_WRITE))){
     renderResult(array('data' => $httpResponse->getAttribute('data')));
 }
@@ -69,11 +72,27 @@ $nodeConfig = $routingService->getRouting($logger, $httpRequest);
 $httpRequest->getRequestParams()->setYmlKey($nodeConfig['ymlKey']);
 //$httpRequest->getRequestParams()->setYmlKey(array_keys($nodeConfig));
 
+/**
+ * convert this to an AsetHttpRequest so we can filter our arguments passed according to nodeConfig
+ * if the main app/config file is set to
+ * security:
+ *     variables:
+ *          secure: true
+ *
+ * this is for basic casting of parameters into their datatypes before beginning the request_start event
+ */
+$siteConfig = $httpRequest->getSiteParams()->getSiteConfig();
+if(isset($siteConfig['security']['variables']['secure']) && $siteConfig['security']['variables']['secure'] == '1') {
+    $asetRequestFactory = new \Gossamer\Aset\Utils\RequestFactory();
+    $httpRequest = $asetRequestFactory->getHttpRequest($httpRequest);
+    unset($asetRequestFactory);
+}
 
 unset($routingService);
 
 $eventDispatcher->setConfiguration($nodeConfig, $httpRequest->getRequestParams()->getYmlKey());
 
+$container->set('EventDispatcher', $eventDispatcher);
 
 //run any services (eg: firewall) before proceeding
 $componentServices = (loadConfig($siteParams->getSitePath() . DIRECTORY_SEPARATOR . $nodeConfig['componentPath'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'services.yml'));
@@ -93,6 +112,11 @@ $serviceDispatcher->dispatch($serviceManager, $httpRequest, $httpResponse);
 runFilters($httpRequest->getSiteParams()->getConfigPath() . 'filters.yml', 'all',\Gossamer\Horus\Filters\FilterEvents::FILTER_REQUEST_START);
 runFilters($httpRequest->getSiteParams()->getSitePath(). DIRECTORY_SEPARATOR . $nodeConfig['componentPath'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'filters.yml',
     $httpRequest->getRequestParams()->getYmlKey(),\Gossamer\Horus\Filters\FilterEvents::FILTER_REQUEST_START);
+
+//check for immediate write here rather that in the filterchain - I don't like to see calls to write and exit buried deep within the code
+if(!is_null($httpResponse->getAttribute(\Gossamer\Horus\Filters\FilterChain::IMMEDIATE_WRITE))){
+    renderResult(array('data' => $httpResponse->getAttribute('data')));
+}
 
 //check to see if we need to run any events for entry_point on the node config
 //that is specific to this request
@@ -115,7 +139,7 @@ if (file_exists($httpRequest->getSiteParams()->getSitePath() . $nodeConfig['comp
     }
 }
 
-$container->set('EventDispatcher', $eventDispatcher);
+//$container->set('EventDispatcher', $eventDispatcher);
 $container->set('FilterService', $filterService);
 
 

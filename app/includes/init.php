@@ -179,7 +179,7 @@ function runFilters($filterConfigPath, $ymlKey, $eventName) {
         $filterService->setFilters($config);
 
         $result = $filterService->filterRequest($httpRequest, $httpResponse, $eventName);
-      
+   
         if (is_array($result)) {
             renderResult($result);
         }
@@ -197,6 +197,7 @@ function runFilters($filterConfigPath, $ymlKey, $eventName) {
 //    DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR . $e->getCode() . '.htm');
 //    $view->render();
 //    die;
+        
     }
 
 }

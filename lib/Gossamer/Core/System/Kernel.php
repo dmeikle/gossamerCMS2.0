@@ -83,6 +83,7 @@ class Kernel
 
     private function getKernelRunner() {
         $config = $this->loadConfig($this->httpRequest->getSiteParams()->getConfigPath() . 'config.yml');
+
         if (!array_key_exists('server_context', $config)) {
             throw new ConfigurationNotFoundException('server_context missing from application config');
         }
@@ -91,7 +92,7 @@ class Kernel
 
             return new DBKernelRunner($this->httpRequest, $this->httpResponse, $this->container);
         }
-        
+       
         return new KernelRunner($this->httpRequest, $this->httpResponse, $this->container);
 
     }

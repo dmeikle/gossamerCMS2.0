@@ -41,4 +41,28 @@ abstract class Request implements HttpInterface{
     public function setHeader($key, $value) {
         $this->headers[$key] = $value;
     }
+
+    //
+    public abstract function getMethod();
+
+    public abstract function getYmlKey();
+
+    public abstract function getSiteParams();
+
+    public abstract function getRequestParams() ;
+
+    public abstract function setRequestParams(RequestParams $requestParams);
+
+    public abstract function setPostParameter($key, $value);
+
+    /**
+     * @return mixed
+     */
+    public abstract function getNodeConfig();
+
+    /**
+     * @param mixed $nodeConfig
+     * @return HttpRequest
+     */
+    public abstract function setNodeConfig(&$nodeConfig);
 }
