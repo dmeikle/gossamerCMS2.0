@@ -87,10 +87,6 @@ class RequestParams
      */
     public function getQueryStringParameters() {
 
-        if (is_null($this->queryStringParameters) && !is_null($this->getQuerystring())) {
-            return $this->getQuerystring();
-        }
-
         return $this->queryStringParameters;
     }
 
@@ -98,7 +94,10 @@ class RequestParams
      * @param mixed $queryStringParameters
      */
     public function setQueryStringParameters($queryStringParameters) {
+
         $this->queryStringParameters = $queryStringParameters;
+
+        return $this;
     }
 
     /**
@@ -256,9 +255,9 @@ class RequestParams
      * @return mixed
      */
     public function getQuerystringParameter($key) {
-        $params = $this->getQuerystring(true);
-        if(array_key_exists($key, $params)) {
-            return $params[$key];
+
+        if(array_key_exists($key, $this->queryStringParameters)) {
+            return $this->queryStringParameters[$key];
         }
 
         return null;

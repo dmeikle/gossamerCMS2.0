@@ -19,6 +19,7 @@ namespace Gossamer\Aset\Utils;
 
 
 use Gossamer\Aset\Casting\ParamTypeCaster;
+use Gossamer\Aset\Exceptions\StrictVariableEnforcementException;
 use Gossamer\Aset\Http\AsetHttpRequest;
 use Gossamer\Horus\Http\HttpRequest;
 
@@ -26,28 +27,57 @@ class RequestFactory
 {
     private $caster;
     private $configParameters;
-
+    private $siteConfig;
+    
+    const URI = 'uri';
+    const POST = 'post';
+    const QUERY = 'query';
+    
+    const ENFORCEMENT_STRICT = 'strict';
+    const ENFORCEMENT_LOOSE = 'loose';
+    const ENFORCEMENT_DEBUG = 'debug';
 
     public function getHttpRequest(HttpRequest &$httpRequest) {
-        $this->caster = new ParamTypeCaster($httpRequest->getSiteParams()->getSiteConfig());
+        $this->siteConfig = $httpRequest->getSiteParams()->getSiteConfig();
+        $this->caster = new ParamTypeCaster($this->siteConfig);
         $this->configParameters = $httpRequest->getNodeConfig();
         $temp = array_shift($this->configParameters);
-        $parameters = $temp['parameters'];
+
+        $parameters = array();
+        if(isset($temp['parameters'])) {
+            $parameters = $temp['parameters'];
+        }
 
         $asetHttpRequest = new AsetHttpRequest($httpRequest);
-        $asetHttpRequest->setQueryString($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getQuerystring()));
-        $asetHttpRequest->setUriParameters($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getUriParameters()));
+        $asetHttpRequest->setQueryStringParameters($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getQuerystring(), self::QUERY));
+     //TODO: this overwrites querystringparams
+      //  $asetHttpRequest->setQueryString($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getQuerystring(), self::QUERY));
+        $asetHttpRequest->setUriParameters($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getUriParameters(), self::URI));
+
         //$asetHttpRequest->setPost($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getPost()));
-        $asetHttpRequest->setPost($httpRequest->getRequestParams()->getPost());
-        
+        $asetHttpRequest->setPost($httpRequest->getRequestParams()->getPost(), self::POST);
+
         return $asetHttpRequest;
     }
 
-    private function getCastParameters(array $params, array $values) {
-        $retval = array();
+    private function getCastParameters(array $params, array $values = null, $type) {
 
-        foreach($params as $index => $param) {
-            if(array_key_exists($param['key'], $values)) {
+        $retval = array();
+        if(is_null($values)) {
+
+            return $retval;
+        }
+        pr($params);
+        //in case it's not specified in the parameters.yml file to enforce this
+        //just let it through since enforcing is not requested
+        if(!isset($params[$type])) {           
+            
+            return $values;
+        }
+
+        foreach($params[$type] as $index => $param) {
+
+            if(isset($values[$param['key']])) {
                 $retval[$param['key']] = $this->caster->cast($param, $values[$param['key']], $param['key']);
             }
         }

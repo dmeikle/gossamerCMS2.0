@@ -30,6 +30,7 @@ class ParamTypeCaster
     }
 
     public function cast(array $parameter, $value, $key) {
+
         $mask = array_key_exists('mask', $parameter) ? $parameter['mask'] : null;
         if($this->siteConfig['security']['variables']['paranoid'] == '1') {
             if(!$this->checkDataType($parameter['type'], $value)) {
@@ -40,6 +41,14 @@ class ParamTypeCaster
         return $this->getType($parameter['type'], $value, $mask);
     }
 
+    /**
+     * @param $type
+     * @param $value
+     * @param null $mask
+     * @return mixed
+     *
+     * converts the value into the specified datatype
+     */
     private function getType($type, $value, $mask = null) {
         switch($type) {
             case 'float':
@@ -65,7 +74,14 @@ class ParamTypeCaster
         }
 
     }
-    
+
+    /**
+     * @param $dataType
+     * @param $value
+     * @return bool
+     *
+     * checks to see whether the value passed in is the correct datatype
+     */
     private function checkDataType($dataType, $value) {
         switch($dataType) {
             case 'float':

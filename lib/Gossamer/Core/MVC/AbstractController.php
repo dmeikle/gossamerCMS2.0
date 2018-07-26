@@ -207,8 +207,7 @@ abstract class AbstractController
     public function save($id = null) {
 
         $post = $this->httpRequest->getRequestParams()->getPost();
-//        pr($post);
-//        die;
+
         if('0' == $id) {
 
             $id = null;
@@ -286,8 +285,6 @@ abstract class AbstractController
     public function search($offset, $limit) {
         $params = array_filter($this->httpRequest->getRequestParams()->getQueryStringParameters());
 
-       // $defaultLocale = $this->getDefaultLocale();
-       // $params['locale'] = $defaultLocale['locale'];
 
         //set precision if it exists in node config for routing.yml
         $config = $this->httpRequest->getNodeConfig();

@@ -109,6 +109,7 @@ class Router
         if(array_key_exists(key($nodeConfig), $view) && is_array($view[key($nodeConfig)])) {
             $nodeConfig[key($nodeConfig)] = array_merge($view[key($nodeConfig)], $nodeConfig[key($nodeConfig)]);
         }
+        
     }
 
 

@@ -36,16 +36,24 @@ class AsetHttpRequest extends HttpRequest
         $this->httpRequest->getRequestParams()->setUriParameters($uriParameters);
     }
 
+    public function getQueryStringParameters() {
+        return $this->httpRequest->getRequestParams()->getQueryStringParameters();
+    }
     public function getUriParameters() {
         return $this->httpRequest->getRequestParams()->getUriParameters();
     }
+    
+    public function setQueryStringParameters(array $params) {
+
+        return $this->httpRequest->getRequestParams()->setQueryStringParameters($params);
+    }
 
     public function setQueryString(array $queryString) {
-        $this->httpRequest->getRequestParams()->setQuerystring($queryString);
+        $this->getRequestParams()->setQuerystring($queryString);
     }
 
     public function getQueryString() {
-        return $this->httpRequest->getRequestParams()->getQuerystring();
+        return $this->getRequestParams()->getQuerystring();
     }
     public function getMethod(){
         return $this->httpRequest->getRequestParams()->getMethod();
