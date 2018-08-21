@@ -1,8 +1,11 @@
 RewriteEngine on
 RewriteBase /
 
-RewriteCond %{HTTP_HOST} ^www\.grillingwithdad\.com [NC]
-RewriteRule ^(.*)$ http://grillingwithdad.com/$1 [L,R=301]
+
+#force redirect to standard URL if desired
+#RewriteCond %{HTTP_HOST} ^www\.yourwebsite\.com [NC]
+#RewriteRule ^(.*)$ http://yourwebsite.com/$1 [L,R=301]
+
 
 Options +FollowSymLinks
 
