@@ -64,7 +64,6 @@ class ServiceDispatcher
     private function loadConfigurations(YAMLParser $parser, array $nodeConfig)
     {
 
-        // $subdirectories = $this->getDirectoryList();
 
         //first load the system service configurations
         $parser->setFilePath(__SITE_PATH . '/app/config/services.yml');
@@ -74,26 +73,14 @@ class ServiceDispatcher
             $this->config[] = $config;
         }
         $folder = str_replace('\\', DIRECTORY_SEPARATOR, $nodeConfig['namespace']) . DIRECTORY_SEPARATOR . $nodeConfig['componentFolder'];
-        //now load all the component configurations
-//        foreach ($subdirectories as $folder) {
-//            $parser->setFilePath($folder . '/config/services.yml');
-//            $config = $parser->loadConfig();
-//
-//            if (is_array($config)) {
-//                $this->config[] = $config;
-//            }
-//        }
+
 
         $parser->setFilePath(__SITE_PATH . DIRECTORY_SEPARATOR . $folder . '/config/services.yml');
         $config = $parser->loadConfig();
-        // file_put_contents(__DEBUG_OUTPUT_PATH, print_r($config, true), FILE_APPEND);
+        
         if (is_array($config)) {
             $this->config[] = $config;
         }
-
-        // file_put_contents(__DEBUG_OUTPUT_PATH, print_r($this->config, true), FILE_APPEND);
-
-        //  file_put_contents(__DEBUG_OUTPUT_PATH,__SITE_PATH . DIRECTORY_SEPARATOR . $folder . '/config/services.yml'."\r\n", FILE_APPEND);
 
     }
 
@@ -108,7 +95,7 @@ class ServiceDispatcher
     public function dispatch(ServiceManager $serviceManager, HttpRequest $httpRequest, HttpResponse $httpResponse)
     {
         $this->loadKeyFromFirewallConfiguration();
-error_log("service key is ".$this->key);
+
         $serviceManager->executeService($this->key, $httpRequest, $httpResponse);
     }
 

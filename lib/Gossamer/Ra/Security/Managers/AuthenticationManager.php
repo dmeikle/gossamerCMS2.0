@@ -63,6 +63,7 @@ abstract class AuthenticationManager
         $this->container = $container;
         $this->userAuthenticationProvider = $provider;
         $this->response = $response;
+
     }
 
 
@@ -127,6 +128,7 @@ abstract class AuthenticationManager
         $token = @unserialize($session['_security_secured_area']);
 
         if (!$token) {
+
 //            echo debug_backtrace()[0]['class']."<br>\r\n";
 //            echo debug_backtrace()[0]['function']."<br>\r\n";
 //            echo debug_backtrace()[1]['function']."<br>\r\n";

@@ -1,6 +1,9 @@
 {
   "autoload": {
-    "psr-0": {"": "./"}
+    "psr-0": {"": "./"},
+    "classmap": [
+      "src/"
+    ]
 
   },
   "require": {
@@ -9,10 +12,11 @@
     "guzzlehttp/guzzle": "6.*",
     "psr/http-message": "~1.0",
     "mobiledetect/mobiledetectlib": "2.8.*",
-    "auth0/auth0-php":"~5.0"
+    "auth0/auth0-php":"~5.0",
+    "get-stream/stream": "^2.7"
   },
 
   "require-dev": {
-    "phpunit/phpunit": "4.0.*"
+    "phpunit/phpunit": "7.0.*"
   }
 }

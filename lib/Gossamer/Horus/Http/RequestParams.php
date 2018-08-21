@@ -86,8 +86,11 @@ class RequestParams
      * @return mixed
      */
     public function getQueryStringParameters() {
+        if(!is_null($this->queryStringParameters)) {
+            return $this->queryStringParameters;
+        }
 
-        return $this->queryStringParameters;
+        return $this->getQuerystring();
     }
 
     /**

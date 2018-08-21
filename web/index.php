@@ -2,8 +2,6 @@
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
-
 //phpinfo();
 //die('done');
 session_start();
@@ -28,14 +26,14 @@ if ($_SERVER['REQUEST_METHOD']=='OPTIONS') {
     header("HTTP/1.1 200 OK");
     die(); 
 }
-
+//print_r($_REQUEST);
 //these are included in order of operation - do not change!
 include_once('../app/includes/configuration.php');
 include_once('../vendor/autoload.php');
 include_once('../app/includes/init.php');
 include_once('../app/includes/bootstrap.php');
- 
-error_log($httpRequest->getRequestParams()->getYmlKey());
+
+error_log("ymlkey is " . $httpRequest->getRequestParams()->getYmlKey());
 //pr( $httpRequest->getNodeConfig());
 use Gossamer\Core\System\Kernel;
 

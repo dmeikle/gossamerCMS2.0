@@ -41,7 +41,6 @@ class Client implements ClientInterface {
                 $this->$key = $value;
             }
         }
-        
     }
 
     /**

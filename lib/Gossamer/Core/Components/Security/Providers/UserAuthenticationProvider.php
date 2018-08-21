@@ -21,8 +21,6 @@ namespace Gossamer\Core\Components\Security\Providers;
 use Gossamer\Core\Datasources\DatasourceInterface;
 use Gossamer\Horus\Http\HttpRequest;
 use Gossamer\Horus\Http\HttpResponse;
-use Gossamer\Ra\Exceptions\ClientCredentialsNotFoundException;
-use Gossamer\Ra\Security\Client;
 use Gossamer\Ra\Security\ClientInterface;
 use Gossamer\Ra\Security\Providers\AuthenticationProviderInterface;
 use Gossamer\Set\Utils\Container;

@@ -91,7 +91,10 @@ function loadConfig($configPath, $ymlKey = null, $type = null, $keys = null) {
        
         if (array_key_exists($ymlKey, $config)) {
             $config = $config[$ymlKey][$type];
-
+            //check to see if it's just an empty file
+            if(!is_array($config) || count($config) == 0) {
+                return array();
+            }
             foreach ($config as $index => $row) {
                 if ($row['event'] != $keys) {
                     unset($config[$index]);

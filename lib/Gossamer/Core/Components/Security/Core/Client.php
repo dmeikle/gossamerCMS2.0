@@ -32,8 +32,6 @@ class Client extends \Gossamer\Ra\Security\Client implements ClientInterface {
     protected $memberID;
     protected $memberPrefix;
     protected $username;
-    protected $firstname;
-    protected $lastname;
 
     /**
      *
@@ -94,38 +92,6 @@ class Client extends \Gossamer\Ra\Security\Client implements ClientInterface {
     public function setUsername($username) {
         $this->username = $username;
 
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFirstname() {
-        return $this->firstname;
-    }
-
-    /**
-     * @param mixed $firstname
-     * @return Client
-     */
-    public function setFirstname($firstname) {
-        $this->firstname = $firstname;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLastname() {
-        return $this->lastname;
-    }
-
-    /**
-     * @param mixed $lastname
-     * @return Client
-     */
-    public function setLastname($lastname) {
-        $this->lastname = $lastname;
         return $this;
     }
 

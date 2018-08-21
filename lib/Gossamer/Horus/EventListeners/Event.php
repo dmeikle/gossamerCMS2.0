@@ -33,4 +33,8 @@ class Event
     public function setParam($key, $params) {
         $this->params[$key] = $params;
     }
+
+    public function setParams(array $params) {
+        $this->params = $params;
+    }
 }

@@ -103,6 +103,7 @@ class FilterDispatcher
      */
     public function filterRequest(HttpRequest &$request, HttpResponse &$response) {
         try {
+            
             $result = $this->filterChain->execute($request, $response, $this->filterChain);
 
             if ($response->getAttribute(FilterChain::IMMEDIATE_WRITE) !== false) {

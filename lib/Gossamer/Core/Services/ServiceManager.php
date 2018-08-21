@@ -193,12 +193,13 @@ error_log($className);
         $this->httpRequest = $httpRequest;
         $this->httpResponse = $httpResponse;
         $service = $this->getService($key);
+
         if (is_null($service)) {
             return;
         }
 
         try {
-            $this->getService($key)->execute();
+            $service->execute();
         } catch (\Exception $e) {
 
         }
