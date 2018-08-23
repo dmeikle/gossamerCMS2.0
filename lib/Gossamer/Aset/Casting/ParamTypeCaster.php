@@ -64,9 +64,10 @@ class ParamTypeCaster
                     return $value;
                 }
 
-            return boolval($value);
+                return boolval($value);
             case 'string':
                 if(!is_null($mask)) {
+
                     return preg_replace($mask, '', $value);
                 }
 

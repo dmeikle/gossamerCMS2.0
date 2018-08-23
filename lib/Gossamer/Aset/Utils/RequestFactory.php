@@ -38,9 +38,11 @@ class RequestFactory
     const ENFORCEMENT_DEBUG = 'debug';
 
     public function getHttpRequest(HttpRequest &$httpRequest) {
+
         $this->siteConfig = $httpRequest->getSiteParams()->getSiteConfig();
         $this->caster = new ParamTypeCaster($this->siteConfig);
         $this->configParameters = $httpRequest->getNodeConfig();
+
         $temp = array_shift($this->configParameters);
 
         $parameters = array();
@@ -54,9 +56,9 @@ class RequestFactory
       //  $asetHttpRequest->setQueryString($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getQuerystring(), self::QUERY));
         $asetHttpRequest->setUriParameters($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getUriParameters(), self::URI));
 
-        //$asetHttpRequest->setPost($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getPost()));
-        $asetHttpRequest->setPost($httpRequest->getRequestParams()->getPost(), self::POST);
-
+        $asetHttpRequest->setPost($this->getCastParameters($parameters, $httpRequest->getRequestParams()->getPost(), self::POST));
+        //$asetHttpRequest->setPost($httpRequest->getRequestParams()->getPost(), self::POST);
+      
         return $asetHttpRequest;
     }
 
@@ -67,11 +69,11 @@ class RequestFactory
 
             return $retval;
         }
-        pr($params);
+
         //in case it's not specified in the parameters.yml file to enforce this
         //just let it through since enforcing is not requested
         if(!isset($params[$type])) {           
-            
+
             return $values;
         }
 

@@ -33,7 +33,7 @@ use Gossamer\Core\Views\AJAXExceptionView;
 use Gossamer\Core\Views\JSONExceptionView;
 use Validation\Exceptions\ValidationFailedException;
 
-abstract class AbstractComponent
+class MockedComponent
 {
 
     use \Gossamer\Set\Utils\ContainerTrait;
@@ -89,37 +89,24 @@ abstract class AbstractComponent
      * @throws HandlerNotCallableException
      */
     public function handleRequest(HttpRequest &$httpRequest, HttpResponse &$httpResponse) {
-        
-        $handler = array(
-            $this->controllerName,
-            $this->method
-        );
-
-        //if it throws an exception we are catching it in the calling Kernel
-        if (is_callable($handler)) {
-            $model = new $this->modelName($httpRequest, $httpResponse, $this->logger);
-            $model->setContainer($this->container);
-
-            $view = new $this->viewName($this->logger, $httpRequest->getRequestParams()->getYmlKey(), $this->agentType, $httpRequest, $httpResponse);
-            $view->setContainer($this->container);
-            $controller = new $this->controllerName($model, $view, $this->logger, $httpRequest, $httpResponse);
-            $controller->setContainer($this->container);
-
-            if (array_key_exists('Gossamer\Core\Components\security\traits\GetLoggedInMemberTrait', class_uses($controller))) {
-                $controller->setHttpRequest($httpRequest);
-            }
-            
-                return call_user_func_array(array(
-                    $controller,
-                    $this->method
-                ), is_null($httpRequest->getRequestParams()->getUriParameters()) ? array() : $httpRequest->getRequestParams()->getUriParameters());
 
 
-        } else {
-            pr($handler);
-            throw new HandlerNotCallableException('unable to match method ' . $this->method . ' to controller with key: ' . $httpRequest->getRequestParams()->getYmlKey());
+        $model = new $this->modelName($httpRequest, $httpResponse, $this->logger);
+        $model->setContainer($this->container);
+
+        $view = new $this->viewName($this->logger, $httpRequest->getRequestParams()->getYmlKey(), $this->agentType, $httpRequest, $httpResponse);
+        $view->setContainer($this->container);
+        $controller = new \Gossamer\Core\MVC\MockableController($model, $view, $this->logger, $httpRequest, $httpResponse);
+        $controller->setContainer($this->container);
+
+        if (array_key_exists('Gossamer\Core\Components\security\traits\GetLoggedInMemberTrait', class_uses($controller))) {
+            $controller->setHttpRequest($httpRequest);
         }
 
+            return call_user_func_array(array(
+                $controller,
+                'mockResult'
+            ), array($httpRequest->getRequestParams()->getYmlKey()));
     }
 
 

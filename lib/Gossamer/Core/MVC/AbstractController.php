@@ -222,10 +222,12 @@ abstract class AbstractController
         $event = new Event('save_success', $params);
         $this->container->get('EventDispatcher')->dispatch($this->httpRequest->getRequestParams()->getYmlKey(), 'save_success', $event);
         $nodeConfig = $this->httpRequest->getNodeConfig();
+
         if(array_key_exists('redirectUrl', $nodeConfig)) {
             header("Location: " . $nodeConfig['redirectUrl']);
             exit;
         }
+        
         return $this->render($result);
     }
 

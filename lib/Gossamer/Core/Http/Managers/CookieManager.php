@@ -128,7 +128,7 @@ class CookieManager {
      * cookies:
         secure: true
         salt: th!zi&YorL0n&saltv!s?
-        name: phoenix
+        name: nameofcookiehere
      */
     private function getCookieCredentials() {
 
