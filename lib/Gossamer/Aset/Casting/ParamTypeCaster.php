@@ -50,11 +50,19 @@ class ParamTypeCaster
      * converts the value into the specified datatype
      */
     private function getType($type, $value, $mask = null) {
+
         switch($type) {
             case 'float':
                 return floatval($value);
+
             case 'int':
                 return intval($value);
+
+            case 'date':
+                $tmp = strtotime($value);
+
+                return date($mask, $tmp);
+
             case 'bool':
             case 'boolean':
                 if($value == '1' || $value =='0') {
@@ -65,6 +73,7 @@ class ParamTypeCaster
                 }
 
                 return boolval($value);
+
             case 'string':
                 if(!is_null($mask)) {
 
@@ -89,6 +98,9 @@ class ParamTypeCaster
                 return is_float($value);
             case 'int':
                 return ((int) $value == $value);
+            case 'date':
+                $d = \DateTime::createFromFormat('Y-m-d', $value);
+                return $d && $d->format('Y-m-d') === $value;
             case 'bool':
             case 'boolean':
                 if($value == '1' || $value =='0') {
