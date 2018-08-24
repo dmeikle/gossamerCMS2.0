@@ -15,7 +15,7 @@
  * Time: 12:29 PM
  */
 
-namespace Gossamer\Ra\Authorization\Voters;
+namespace Gossamer\Ra\Security\Authorization\Voters;
 
 
 use Gossamer\Ra\Security\TokenInterface;

@@ -15,13 +15,15 @@
  * Time: 12:41 PM
  */
 
-namespace Gossamer\Ra\Authorization\Voters;
+namespace Gossamer\Ra\Security\Authorization\Voters;
 
 
 use Gossamer\Ra\Security\Roles\Role;
 use Gossamer\Ra\Security\TokenInterface;
+use Gossamer\Ra\Security\Authorization\Voters\AbstractVoter;
+use Gossamer\Ra\Security\Authorization\Voters\VoterInterface;
 
-class RoleVoter implements VoterInterface
+class CheckUserByRolesVoter extends AbstractVoter implements VoterInterface
 {
 
 
@@ -36,6 +38,7 @@ class RoleVoter implements VoterInterface
         $retval = VoterInterface::ACCESS_ABSTAIN;
         $roles = $this->getRoles($token);
 
+        //start by getting the roles passed in
         foreach ($attributes as $attribute) {
             if($attribute instanceof Role) {
                 $attribute = $attribute->getRole();
@@ -45,7 +48,7 @@ class RoleVoter implements VoterInterface
 
             //this is a string array
             foreach($roles as $role) {
-                if($attribute === $role) {
+                if($attribute === $role && $this->checkRules($token, $subject, $role)) {
                     return VoterInterface::ACCESS_GRANTED;
                 }
             }
@@ -56,9 +59,37 @@ class RoleVoter implements VoterInterface
 
     /**
      * @param TokenInterface $token
+     *
      * @return string[]
      */
     protected function getRoles(TokenInterface $token) {
         return $token->getRoles();
     }
+
+    /**
+     * @param TokenInterface $token
+     *
+     * @return string
+     */
+    protected function getUserid(TokenInterface $token) {
+        return $token->getClient()->getId();
+    }
+
+    protected function checkRules(TokenInterface $token, $subject, string $role) {
+        //check to see if it's a manager checking on a member of a group
+        if(isset($this->voterConfig['ignoreRolesIfNotSelf'])) {
+            //it's not self so lets see if we have permission to access
+            if($this->getUserid($token) != $subject['id']) {
+                return (!in_array($role, $this->voterConfig['ignoreRolesIfNotSelf']));
+            }
+        }
+        //let's see if we're just looking at our own and that we also allowed to
+        if(isset($this->voterConfig['self']) && $this->voterConfig['self'] == 'true') {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
