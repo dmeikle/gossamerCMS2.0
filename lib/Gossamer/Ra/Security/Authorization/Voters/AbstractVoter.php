@@ -26,6 +26,8 @@ class AbstractVoter
      * example:
      * members_get:
         access_control:
+            #method options: uri, post, query
+            subject: - { param: id, method: uri}
             roles:
                 - IS_MEMBER
                 - IS_MEMBER_MANAGER

@@ -40,13 +40,28 @@ class AccessControlManager
     }
 
     /**
-     *
+     * @param array $securityConfig
+     * @return bool
+     * @throws KeyNotSetException
+     * @throws UnauthorizedAccessException
      */
     public function execute(array $securityConfig) {
-        print_r($securityConfig);
+
+        if(!array_key_exists('access_control', $securityConfig)) {
+            throw new KeyNotSetException('access_control not set in security config');
+        }
+        $securityConfig = $securityConfig['access_control'];
+
         if(!array_key_exists('roles', $securityConfig)) {
             throw new KeyNotSetException('roles not set in security config');
         }
+        if(!array_key_exists('subject', $securityConfig)) {
+            throw new KeyNotSetException('subject not set in security config');
+        }
+        if(!array_key_exists('rules', $securityConfig)) {
+            throw new KeyNotSetException('rules not set in security config');
+        }
+
         $attributes = $this->buildRoles($securityConfig['roles']);
         $token = @unserialize(getSession('_security_secured_area'));
 

@@ -97,13 +97,17 @@ function super_unset($item) {
 $_SESSION = array();
 
 function getSession($key) {
+    global $_SESSION;
     $session = $_SESSION;
 
+   
     return fixObject($session[$key]);
 }
 
 function setSession($key, $value) {
+    global $_SESSION;
     $_SESSION[$key] = $value;
+   
 }
 
 function fixObject(&$object) {

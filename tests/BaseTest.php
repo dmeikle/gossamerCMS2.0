@@ -143,7 +143,28 @@ class BaseTest extends TestCase
 
         return $view;
     }
+    
+    protected function getRequestParams(array $get, array $post, array $uriParameters, string $method) {
+        $requestParams = new \Gossamer\Horus\Http\RequestParams();
 
+        $requestParams->setHeaders(array());
+        $requestParams->setPost($post);
+        $requestParams->setQuerystring($get);
+        $requestParams->setUriParameters($uriParameters);
+        $requestParams->setServer(array());
+        $requestParams->setLayoutType($this->getLayoutType());
+        $requestParams->setMethod($method);
+        $requestParams->setSiteURL('phpunit_site_test');
+
+        // $requestParams->setUri()
+        return $requestParams;
+    }
+
+    private function getLayoutType() {
+       
+
+        return array('isMobile' => 0, 'isTablet' => 0, 'isDesktop' => 1);
+    }
 //    protected static $dbh;
 //
 //    public static function setUpBeforeClass()

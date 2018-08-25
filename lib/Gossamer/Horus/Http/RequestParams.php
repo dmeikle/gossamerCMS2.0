@@ -271,6 +271,7 @@ class RequestParams
      * @return RequestParams
      */
     public function setQuerystring($querystring, $override = false) {
+
         if($override) {
             $this->querystring = $querystring;
 

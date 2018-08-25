@@ -30,7 +30,7 @@ class CheckUserByRolesVoter extends AbstractVoter implements VoterInterface
     /**
      * @param TokenInterface $token
      * @param $subject
-     * @param array $attributes
+     * @param array $attributes - the list of Roles
      * @return int ACCESS_GRANTED|ACCESS_ABSTAIN|ACCESS_DENIED
      *
      */
@@ -48,7 +48,9 @@ class CheckUserByRolesVoter extends AbstractVoter implements VoterInterface
 
             //this is a string array
             foreach($roles as $role) {
+                
                 if($attribute === $role && $this->checkRules($token, $subject, $role)) {
+
                     return VoterInterface::ACCESS_GRANTED;
                 }
             }
@@ -75,9 +77,17 @@ class CheckUserByRolesVoter extends AbstractVoter implements VoterInterface
         return $token->getClient()->getId();
     }
 
+    /**
+     * @param TokenInterface $token
+     * @param $subject
+     * @param string $role
+     * @return bool
+     */
     protected function checkRules(TokenInterface $token, $subject, string $role) {
+
         //check to see if it's a manager checking on a member of a group
         if(isset($this->voterConfig['ignoreRolesIfNotSelf'])) {
+
             //it's not self so lets see if we have permission to access
             if($this->getUserid($token) != $subject['id']) {
                 return (!in_array($role, $this->voterConfig['ignoreRolesIfNotSelf']));
