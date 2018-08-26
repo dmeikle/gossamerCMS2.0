@@ -51,7 +51,7 @@ class ServiceManager
      * @param EntityManager $entityManager
      * @param Container $container
      */
-    public function __construct(LoggingInterface $logger, array $serviceConfig, array $componentServices = null, EntityManager $entityManager, Container $container) {
+    public function __construct(LoggingInterface $logger, array $serviceConfig, array $componentServices = null, EntityManager $entityManager, Container $container, HttpRequest $httpRequest, HttpResponse $httpResponse) {
        error_log('servicemanager');
         $this->container = $container;
         $this->formatArray($serviceConfig);
@@ -61,6 +61,8 @@ class ServiceManager
         if(!is_null($componentServices)) {
             $this->formatArray($componentServices);
         }
+        $this->httpRequest = $httpRequest;
+        $this->httpResponse = $httpResponse;
     }
 
     /**
@@ -96,7 +98,6 @@ class ServiceManager
         foreach ($constructors as $key => $constructor) {
             $injectors = array_merge($injectors, $this->fetchServiceType($key, $constructor));
         }
-
 
         $className = $config['handler'];
         $class = new $className(...array_values($injectors));
@@ -147,7 +148,7 @@ error_log($className);
         } elseif (substr($value, 0, 11) == 'container::') {
             $item = substr($value, 11);
             $injector[$key] = $this->container->get($item);
-        } elseif ($value == 'httpRequest') {
+        } elseif ($value == 'httpRequest') { 
             $injector[$key] = $this->httpRequest;
         } elseif ($value == 'httpResponse') {
             $injector[$key] = $this->httpResponse;
@@ -189,9 +190,7 @@ error_log($className);
      *
      * @return mixed
      */
-    public function executeService($key, HttpRequest $httpRequest, HttpResponse $httpResponse) {
-        $this->httpRequest = $httpRequest;
-        $this->httpResponse = $httpResponse;
+    public function executeService($key) {
         $service = $this->getService($key);
 
         if (is_null($service)) {

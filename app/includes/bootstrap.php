@@ -14,6 +14,8 @@
  * Date: 3/1/2017
  * Time: 8:25 PM
  */
+use Gossamer\Ra\Security\Handlers\AuthorizationHandler;
+
 $logger = buildLogger($siteParams);
 $container = new \Gossamer\Set\Utils\Container();
 $container->set('Logger', $logger);
@@ -96,11 +98,48 @@ $container->set('EventDispatcher', $eventDispatcher);
 
 //run any services (eg: firewall) before proceeding
 $componentServices = (loadConfig($siteParams->getSitePath() . DIRECTORY_SEPARATOR . $nodeConfig['componentPath'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'services.yml'));
-$serviceManager = new \Gossamer\Core\Services\ServiceManager($logger, loadConfig($siteParams->getConfigPath() . 'services.yml'), $componentServices, $entityManager, $container);
+$serviceManager = new \Gossamer\Core\Services\ServiceManager($logger, loadConfig($siteParams->getConfigPath() . 'services.yml'), $componentServices, $entityManager, $container, $httpRequest, $httpResponse);
+
+//$handler = new \Gossamer\Ra\Security\Handlers\AuthorizationHandler($container->get('Logger'), $httpRequest);
+//$handler->setContainer($container);
+//$handler->setParameters($container->get('securityContext'))
 
 
+/**
+ * Now that we have the YML key and node config for this request
+ * check the authorization of the user to see if they are able
+ * to make this request with the requested parameters.
+ *
+ * This is all stored in the security.yml file of the requested
+ * component's config directory.
+ *
+ * eg:
+ * components/members/config/security.yml
+ *  members_get:
+        access_control:
+            #method options: uri, post, query
+            subject:
+                param: id <-- the id of a member to view
+                method: uri <-- where to look for the parameter
+            roles:
+                - IS_MEMBER <-- list of allowable roles for this yml key
+                - IS_MANAGER
+            rules:
+                - { class: 'Gossamer\Ra\Security\Authorization\Voters\CheckUserByRolesVoter', self: true, ignoreRolesIfNotSelf: [IS_MEMBER] }
+ *
+ *  ---------------- notes: ----------------
+ *                      class - the class of the voter to instantiate
+ *                      self - user gets a free pass if its their own id regardless of role
+ *                      ignoreRolesIfNotSelf - if it's not a member's own id, disregard the IS_MEMBER role, they need more than that
+ */
 $serviceDispatcher = new \Gossamer\Core\Services\ServiceDispatcher($logger, $httpRequest, loadConfig($siteParams->getConfigPath() . 'firewall.yml'));
 $serviceDispatcher->dispatch($serviceManager, $httpRequest, $httpResponse);
+try{
+    $authorizationHandler = $serviceManager->getService('authorization_handler');
+    $authorizationHandler->execute();
+}catch(\Gossamer\Ra\Exceptions\UnauthorizedAccessException $e) {
+    renderErrorResult($e);
+}
 
 /**
  * Now that we have the node configuration loaded for this particular request,

@@ -44,7 +44,6 @@ $siteParams->setIsCaching(true);
 $siteParams->setSiteConfig(loadConfig($siteParams->getConfigPath() . 'config.yml'));
 
 
-
 //file_put_contents(__DEBUG_OUTPUT_PATH, print_r($container->get('EntityManager')));
 
 function pr($item) {
@@ -88,11 +87,11 @@ function loadConfig($configPath, $ymlKey = null, $type = null, $keys = null) {
         if (is_null($config)) {
             throw new \Gossamer\Essentials\Configuration\Exceptions\FileNotFoundException($configPath . ' does not exist');
         }
-       
+
         if (array_key_exists($ymlKey, $config)) {
             $config = $config[$ymlKey][$type];
             //check to see if it's just an empty file
-            if(!is_array($config) || count($config) == 0) {
+            if (!is_array($config) || count($config) == 0) {
                 return array();
             }
             foreach ($config as $index => $row) {
@@ -105,8 +104,8 @@ function loadConfig($configPath, $ymlKey = null, $type = null, $keys = null) {
             //nothing found for this yml key
             return array();
         }
-    }elseif(!is_null($ymlKey)) {
-        if(array_key_exists($ymlKey, $config)) {
+    } elseif (!is_null($ymlKey)) {
+        if (array_key_exists($ymlKey, $config)) {
             return $config[$ymlKey];
         }
     }
@@ -128,28 +127,34 @@ function super_unset($item) {
 
 function renderResult(array $result) {
 
-    if(array_key_exists('headers', $result)) {
+    if (array_key_exists('headers', $result)) {
         foreach ($result['headers'] as $header) {
             header($header);
         }
     }
-    if(!array_key_exists('data', $result)) {
+    if (!array_key_exists('data', $result)) {
         die('no response generated');
     }
     print_r($result['data']);
     exit;
 }
 
+function renderErrorResult(\Exception $e) {
+    header($e->getCode());
+    echo $e->getMessage();
+    exit;
+}
+
 
 function getSession($key = null) {
     $session = $_SESSION;
-    if(!is_array($session)) {
+    if (!is_array($session)) {
         $session = array();
     }
     if (is_null($key)) {
         return $session;
     }
-    if(!array_key_exists($key, $session)) {
+    if (!array_key_exists($key, $session)) {
         return null;
     }
     return fixObject($session[$key]);
@@ -182,12 +187,12 @@ function runFilters($filterConfigPath, $ymlKey, $eventName) {
         $filterService->setFilters($config);
 
         $result = $filterService->filterRequest($httpRequest, $httpResponse, $eventName);
-   
+
         if (is_array($result)) {
             renderResult($result);
         }
 
-    }catch(\Gossamer\Essentials\Configuration\Exceptions\FileNotFoundException $e) {
+    } catch (\Gossamer\Essentials\Configuration\Exceptions\FileNotFoundException $e) {
         //nothing needed to run
     } catch (\Exception $e) {
         echo $e->getMessage();
@@ -200,7 +205,7 @@ function runFilters($filterConfigPath, $ymlKey, $eventName) {
 //    DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR . $e->getCode() . '.htm');
 //    $view->render();
 //    die;
-        
+
     }
 
 }

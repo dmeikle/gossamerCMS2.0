@@ -96,7 +96,7 @@ class ServiceDispatcher
     {
         $this->loadKeyFromFirewallConfiguration();
 
-        $serviceManager->executeService($this->key, $httpRequest, $httpResponse);
+        $serviceManager->executeService($this->key);
     }
 
 }

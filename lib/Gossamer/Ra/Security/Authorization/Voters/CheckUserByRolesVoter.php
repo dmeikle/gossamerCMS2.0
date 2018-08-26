@@ -48,7 +48,6 @@ class CheckUserByRolesVoter extends AbstractVoter implements VoterInterface
 
             //this is a string array
             foreach($roles as $role) {
-                
                 if($attribute === $role && $this->checkRules($token, $subject, $role)) {
 
                     return VoterInterface::ACCESS_GRANTED;

@@ -12,10 +12,13 @@ namespace Gossamer\Ra\Security\Managers;
 use Gossamer\Core\Configuration\Exceptions\KeyNotSetException;
 use Gossamer\Horus\Http\HttpRequest;
 use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Horus\Http\Traits\ClientIPAddressTrait;
 use Gossamer\Neith\Logging\LoggingInterface;
 use Gossamer\Ra\Exceptions\UnauthorizedAccessException;
 use Gossamer\Ra\Security\Authorization\Voters\VoterInterface;
+use Gossamer\Ra\Security\Client;
 use Gossamer\Ra\Security\Roles\Role;
+use Gossamer\Ra\Security\SecurityToken;
 use Gossamer\Set\Utils\ContainerTrait;
 use Gossamer\Ra\Security\Authorization\Voters\Voter;
 
@@ -23,6 +26,7 @@ class AccessControlManager
 {
 
     use ContainerTrait;
+use ClientIPAddressTrait;
 
     protected $logger;
 
@@ -63,19 +67,71 @@ class AccessControlManager
         }
 
         $attributes = $this->buildRoles($securityConfig['roles']);
-        $token = @unserialize(getSession('_security_secured_area'));
+        $token = $this->generateNewToken($this->getClient());
 
         foreach($securityConfig['rules'] as $rule ) {
             $voterName = $rule['class'];
             $voter = new $voterName($rule, $this->request);
 
             if($voter->vote($token, $this->getSubject($securityConfig['subject']), $attributes) == VoterInterface::ACCESS_DENIED) {
+              
                throw new UnauthorizedAccessException();
             }
         }
 
         return true;
     }
+
+    /**
+     * generates a new token based on current client.
+     *
+     * can pass an optional client in, in case we just logged in and need to update the token
+     * with new client details
+     *
+     * @param Client|null $client
+     * @return SecurityToken
+     */
+    public function generateNewToken(Client $client = null) {
+
+        if (is_null($client)) {
+
+            $client = $this->getClient();
+
+        }
+
+        $token = new SecurityToken($client, $this->request->getRequestParams()->getYmlKey(), $client->getRoles());
+
+        return $token;
+    }
+
+    /**
+     * @return Client|null
+     */
+    protected function getClient() {
+        $token = $this->getSecurityContextToken();
+        $client = null;
+        if (is_null($token) || !$token) {
+            $client = new Client();
+            $client->setIpAddress($this->getClientIPAddress());
+            $client->setCredentials('ANONYMOUS_USER');
+            $client->setRoles(['ANONYMOUS_USER']);
+        } else {
+            $client = $token->getClient();
+        }
+
+        return $client;
+    }
+
+    /**
+     *
+     * @return \core\components\security\core\FormToken
+     */
+    protected function getSecurityContextToken() {
+        $token = unserialize(getSession('_security_secured_area'));
+        return $token;
+    }
+
+
 
 
     /**

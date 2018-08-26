@@ -36,6 +36,7 @@ class DecryptJwtFilter extends AbstractFilter
     public function execute(HttpRequest &$request, HttpResponse &$response, FilterChain &$chain) {
 
         try{
+
             $jwt = $this->getJwtHeader();
 
             $manager = new TokenManager($this->httpRequest);
