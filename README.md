@@ -2,7 +2,7 @@
 
 Architecture borrows best practices from Java Enterprise approach including design patterns for security, OOP structure, configuration-based approach, filters, event listeners
 
-##Database / datastore agnostic
+## Database / datastore agnostic
 - Not hardwired to a database; everything is done via REST calls and/or Client API calls
 - Can work with multiple databases via configuration
 - Credentials based
@@ -11,7 +11,7 @@ Architecture borrows best practices from Java Enterprise approach including desi
 - ie. /GET could be different than 
 - Customize calls to different datasources in config vs in the code
 
-##Security
+## Security
 - Configuration defines authorization to URI level, role level
 - Avoids code-level security issues
 - Designed to manage through filters & event listeners, similar to a Java Enterprise design pattern
@@ -19,15 +19,15 @@ Architecture borrows best practices from Java Enterprise approach including desi
 Behaviour of framework is configuration based not code based
 - Handling of calls, returns is in configuration
 
-##Examples:
+## Examples:
 - If we want to change data source… 
 
-##Production, Staging & Testing
+## Production, Staging & Testing
 - Environment based configuration
 - Staging environment configuration with ability to provide mock-data responses
 - Configure sample data for endpoint testing and prototyping that avoids database connection if desired
 
-##PHP based advantages
+## PHP based advantages
 - Proven language with strong documentation, community support
 - Modern version is faster with compiled 
 - Type-scripted language enforces strong datatypes
