@@ -1,4 +1,4 @@
-# gossamerCMS2.0
+# gossamerCMS 2.0
 
 Architecture borrows best practices from Java Enterprise approach including design patterns for security, OOP structure, configuration-based approach, filters, event listeners
 
