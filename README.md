@@ -3,7 +3,8 @@
 Architecture borrows best practices from Java Enterprise approach including design patterns for security, OOP structure, configuration-based approach, filters, event listeners
 
 ## Database / datastore agnostic
-- Not hardwired to a database; everything is done via REST calls and/or Client API calls
+The framework does not connect directly to a database like most traditional frameworks; everything is done via REST calls and/or Client API calls. This permits the framework to connect to multiple datasources via a credentials file. Datasource connections can be configured individually at the granulairty of each request URI endpoint by use of a configuration file (routing.yml) located in each component directory. This means it can be configured to connect to 1 datasource on a URI's [GET] request and an alternate datasource on the same URI's [POST] request. If a change to the datasource is required there is no need to change the code, simply change the datasource key in the configuration file for that requested URI endpoint.
+- REST based datasource connectivity
 - Can work with multiple databases via configuration
 - Credentials based
 - If changing from database types, can extend existing classes in configuration
@@ -12,6 +13,7 @@ Architecture borrows best practices from Java Enterprise approach including desi
 - Customize calls to different datasources in config vs in the code
 
 ## Security
+Security can be defined for each request URI endpoint. This permits the configuration for authentication AND authorization handlers for each endpoint without the need for writing the code into a controller. Authentication can be defined in the app level firewall.yml file with individual authorization handlers defined in each component's security.yml file.
 - Configuration defines authorization to URI level, role level
 - Avoids code-level security issues
 - Designed to manage through filters & event listeners, similar to a Java Enterprise design pattern
@@ -20,7 +22,20 @@ Behaviour of framework is configuration based not code based
 - Handling of calls, returns is in configuration
 
 ## Examples:
-- If we want to change data source… 
+- If we want to change data source:
+```
+members_save:
+    pattern: '/members/{id}'
+    defaults:
+        component: components\members\MembersComponent
+        controller: components\members\controllers\MembersController
+        model: components\members\models\MemberModel
+        method: save
+        view: Gossamer\Core\Views\JSONView
+        viewKey: members_save
+        datasource: datasource1
+    methods: [POST]
+```
 
 ## Production, Staging & Testing
 - Environment based configuration
