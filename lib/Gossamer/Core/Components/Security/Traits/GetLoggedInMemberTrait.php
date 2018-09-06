@@ -34,7 +34,8 @@ trait GetLoggedInMemberTrait {
      */ 
     protected function getLoggedInMember() {
         $token = $this->getSecurityToken();
-
+pr($token);
+        die;
         if (!is_object($token) || is_null($token->getClient())) {
             if($this->isDebugMode()) {
                 error_log('warning: DEBUG MODE IS SET TO TRUE IN CONFIG.YML');

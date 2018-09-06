@@ -40,11 +40,10 @@ class WriteResultToCacheListener extends AbstractListener
     
         $params = $event->getParams();
 
-        $cacheManager = new CacheManager();
-        $cacheManager->setHttpRequest($this->httpRequest);
+        $this->cacheManager->setHttpRequest($this->httpRequest);
 
-        $cacheManager->saveToCache($this->getKey(), $params);
-        unset($cacheManager);
+        $this->cacheManager->saveToCache($this->getKey(), $params);
+   
     }
 
     protected function getKey() {

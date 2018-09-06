@@ -36,7 +36,9 @@ class JSONView extends AbstractView
             $data['JWT'] = $this->httpResponse->getAttribute('Authorization');
             $this->httpResponse->removeAttribute('Authorization');
         }
+    
         $data = array_merge($data, $this->httpResponse->getAttributes());
+
         $retval = array(
             'headers' => $this->buildHeaders(), //array('Content-Type: application/json'),
             'data' => json_encode($data)

@@ -55,7 +55,6 @@ abstract class AbstractController
 
         //run through any filters that may need to perform serialization on any results first
         $this->httpRequest->setAttribute('REQUEST_RESULT_DATA', $data);
-
         runFilters($this->httpRequest->getSiteParams()->getSitePath(). DIRECTORY_SEPARATOR . $this->httpRequest->getNodeConfig()['componentPath'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'filters.yml', $this->httpRequest->getRequestParams()->getYmlKey(),FilterEvents::FILTER_SERIALIZATION);
        
         runFilters($this->httpRequest->getSiteParams()->getConfigPath() . 'filters.yml', 'all',FilterEvents::FILTER_SERIALIZATION);
@@ -75,7 +74,7 @@ abstract class AbstractController
         $this->container->get('EventDispatcher')->dispatch($this->httpRequest->getRequestParams()->getYmlKey(), KernelEvents::RESPONSE_START, $event);
 
         $data = $event->getParams();
-        
+
         return $this->view->render($data);
     }
 

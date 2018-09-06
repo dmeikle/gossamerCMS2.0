@@ -39,9 +39,9 @@ class CacheManager implements CachingInterface
     }
 
     private function getCacheDirectory() {
-        if (defined('__CACHE_DIRECTORY')) {
-            return __CACHE_DIRECTORY;
-        }
+//        if (defined('__CACHE_DIRECTORY')) {
+//            return __CACHE_DIRECTORY;
+//        }
 
         if(!is_null($this->request)) {
             return $this->request->getSiteParams()->getCacheDirectory();
@@ -125,7 +125,7 @@ class CacheManager implements CachingInterface
 
         array_pop($pieces);
 
-        return $path . implode(DIRECTORY_SEPARATOR, $pieces) . DIRECTORY_SEPARATOR;
+        return $path . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $pieces) . DIRECTORY_SEPARATOR;
     }
 
     /**
