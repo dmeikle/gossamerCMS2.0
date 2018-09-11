@@ -54,12 +54,4 @@ class EncryptJwtFilter extends AbstractFilter
         return $id;
     }
 
-    private function debug($jwt) {
-        $manager = new TokenManager($this->httpRequest);
-
-        $tmp = $manager->getDecryptedJwtToken($jwt);
-
-        file_put_contents(__DEBUG_OUTPUT_PATH, "jwt: $jwt\r\n". print_r($tmp, true), FILE_APPEND);
-    }
-
 }

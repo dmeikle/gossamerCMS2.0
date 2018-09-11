@@ -20,6 +20,7 @@ namespace Gossamer\Core\Components\Security\Traits;
 
 use Gossamer\Core\Components\Security\Core\Client;
 use Gossamer\Horus\Http\HttpRequest;
+use Gossamer\Horus\Http\Traits\ClientIPAddressTrait;
 use Gossamer\Ra\Security\SecurityToken;
 
 //use extensions\textlogin\security\Client;
@@ -27,15 +28,15 @@ use Gossamer\Ra\Security\SecurityToken;
 trait GetLoggedInMemberTrait {
 
     use \Gossamer\Core\Configuration\Traits\LoadConfigurationTrait;
-
+    use ClientIPAddressTrait;
     /**
      *
      * @return int
      */ 
-    protected function getLoggedInMember() {
+    protected function getLoggedInMember(): \Gossamer\Ra\Security\Client {
+
         $token = $this->getSecurityToken();
-pr($token);
-        die;
+
         if (!is_object($token) || is_null($token->getClient())) {
             if($this->isDebugMode()) {
                 error_log('warning: DEBUG MODE IS SET TO TRUE IN CONFIG.YML');
@@ -65,7 +66,7 @@ pr($token);
 
         return $token;
     }
- 
+
 
     private function isDebugMode() {
        $config = $this->loadConfig($this->httpRequest->getSiteParams()->getConfigPath() . 'config.yml');

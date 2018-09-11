@@ -149,9 +149,15 @@ function buildLogger() {
 
 
 
+function pr($message) {
+    echo "\r\n....print...\r\n";
+    print_r($message);
+    echo "\r\n...end print...\r\n";
+}
 
+function runFilters($filterConfigPath, $ymlKey, $eventName) {
 
-
+}
 
 
 

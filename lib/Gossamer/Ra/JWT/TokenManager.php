@@ -64,8 +64,7 @@ class TokenManager
         //first load the salt
         $salt = $this->loadSalt();
         $jwtToken = $this->decrypt($jwtString, self::KEY, $salt);
-        echo "token";
-pr($jwtToken);
+
         //since the token was serialized before encrypting it (to preserve objects) we unserialize it now
        // $jwtToken = unserialize(trim($jwtToken));
         $jwtToken = json_decode(trim($jwtToken), true);

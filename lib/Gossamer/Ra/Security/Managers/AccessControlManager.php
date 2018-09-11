@@ -74,7 +74,7 @@ use ClientIPAddressTrait;
             $voter = new $voterName($rule, $this->request);
 
             if($voter->vote($token, $this->getSubject($securityConfig['subject']), $attributes) == VoterInterface::ACCESS_DENIED) {
-              
+            
                throw new UnauthorizedAccessException();
             }
         }

@@ -132,13 +132,15 @@ $serviceManager = new \Gossamer\Core\Services\ServiceManager($logger, loadConfig
  *                      self - user gets a free pass if its their own id regardless of role
  *                      ignoreRolesIfNotSelf - if it's not a member's own id, disregard the IS_MEMBER role, they need more than that
  */
-$serviceDispatcher = new \Gossamer\Core\Services\ServiceDispatcher($logger, $httpRequest, loadConfig($siteParams->getConfigPath() . 'firewall.yml'));
-$serviceDispatcher->dispatch($serviceManager, $httpRequest, $httpResponse);
-try{
-    $authorizationHandler = $serviceManager->getService('authorization_handler');
-    $authorizationHandler->execute();
-}catch(\Gossamer\Ra\Exceptions\UnauthorizedAccessException $e) {
-    renderErrorResult($e);
+if($siteConfig['server_context'] == 'standard') {
+    $serviceDispatcher = new \Gossamer\Core\Services\ServiceDispatcher($logger, $httpRequest, loadConfig($siteParams->getConfigPath() . 'firewall.yml'));
+    $serviceDispatcher->dispatch($serviceManager, $httpRequest, $httpResponse);
+    try {
+        $authorizationHandler = $serviceManager->getService('authorization_handler');
+        $authorizationHandler->execute();
+    } catch (\Gossamer\Ra\Exceptions\UnauthorizedAccessException $e) {
+        renderErrorResult($e);
+    }
 }
 
 /**
@@ -147,7 +149,6 @@ try{
  */
 //check to see if we need to run any filters for entry_point on the node config
 //that is specific to this request
-
 runFilters($httpRequest->getSiteParams()->getConfigPath() . 'filters.yml', 'all',\Gossamer\Horus\Filters\FilterEvents::FILTER_REQUEST_START);
 runFilters($httpRequest->getSiteParams()->getSitePath(). DIRECTORY_SEPARATOR . $nodeConfig['componentPath'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'filters.yml',
     $httpRequest->getRequestParams()->getYmlKey(),\Gossamer\Horus\Filters\FilterEvents::FILTER_REQUEST_START);

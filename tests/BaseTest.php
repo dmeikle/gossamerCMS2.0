@@ -51,7 +51,7 @@ class BaseTest extends TestCase
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
 
         if($requestMethod == 'POST') {
-            parse_str($requestParams, $_POST);
+            parse_str(implode('&',$requestParams->getPost()), $_POST);
             $_SERVER['QUERY_STRING'] ='';
         }else{
             $_SERVER['QUERY_STRING'] = $requestParams;
@@ -120,8 +120,9 @@ class BaseTest extends TestCase
 
     
     protected function getContainer($httpRequest, $httpResponse) {
-
+pr($this->container);
         if(is_null($this->container )) {
+            echo "container is null\r\n";
             $this->container = new Container();
             $entityManager = new EntityManager($this->getDBCredentials());
             //instantiate the database entity manager
@@ -130,7 +131,7 @@ class BaseTest extends TestCase
             $eventDispatcher = new EventDispatcher($this->getLogger(), $httpRequest, $httpResponse, 'GET', 'phpunit_test');
             $this->container->set('EventDispatcher',  $eventDispatcher);
         }
-
+pr($this->container);
         return $this->container;
     }
 
