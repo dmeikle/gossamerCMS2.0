@@ -9,6 +9,8 @@
 /app/config/firewall.yml
 /app/config/routing.yml
 /app/config/services.yml
+/app/config/db-firewall.yml
+/app/config/phpunit.credentials.yml
 
 /vendor
 
