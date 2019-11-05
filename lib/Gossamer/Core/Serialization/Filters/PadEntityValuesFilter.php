@@ -40,7 +40,7 @@ class PadEntityValuesFilter extends AbstractFilter
         if(!array_key_exists($this->filterConfig->get('entity'), $data) || !is_array($data[$this->filterConfig->get('entity')])) {
             $data[$this->filterConfig->get('entity')] = array();
         }
- 
+
         $serializer->padEntityValues($data[$this->filterConfig->get('entity')]);
 
         $this->httpRequest->setAttribute('REQUEST_RESULT_DATA', $data);

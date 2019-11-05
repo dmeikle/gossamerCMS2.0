@@ -64,7 +64,7 @@ class Router
         $nodeConfig = $this->findConfigKeyByURIPattern($componentConfig, $this->httpRequest);
 
         if ($nodeConfig === false) {
-            throw new KeyNotSetException('Cannot locate configuration for requested URL', 404);
+            throw new KeyNotSetException('Cannot locate configuration for requested URL ' . $this->httpRequest->getRequestParams()->getUri(), 404);
         }
 
         //set the node path so we can access it for the remainder of the request

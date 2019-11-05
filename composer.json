@@ -16,6 +16,7 @@
     "get-stream/stream": "^2.7",
     "web-token/jwt-core": "^1.2",
     "web-token/jwt-encryption": "^1.2",
-    "symfony/yaml": "^4.1"
+    "symfony/yaml": "^4.1",
+    "spomky-labs/aes-key-wrap": "^5.0"
   }
 }

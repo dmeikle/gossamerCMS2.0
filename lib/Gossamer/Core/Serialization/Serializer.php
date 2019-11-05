@@ -44,6 +44,6 @@ class Serializer
                 $this->padEntityValues($entity[$key], $value);
             }
         }
-
+pr($entity);
     }
 }

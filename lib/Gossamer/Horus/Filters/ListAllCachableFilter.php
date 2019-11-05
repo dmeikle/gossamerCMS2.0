@@ -24,7 +24,9 @@ use Gossamer\Horus\Http\HttpResponse;
 class ListAllCachableFilter extends AbstractCachableFilter
 {
     public function execute(HttpRequest &$request, HttpResponse &$response, FilterChain &$chain) {
+
         $list = $this->retrieveFromCache();
+
         if($list === false) {
             $this->httpRequest = $request;
 
@@ -38,7 +40,7 @@ class ListAllCachableFilter extends AbstractCachableFilter
             $modelName = $this->filterConfig->get('model');
             $model = new $modelName($request, $response, $this->container->get('Logger'));
 
-            $list = $this->getEntityManager()->getConnection('datasource1')->query(self::METHOD_GET, $model, 'listminimal', $params);
+            $list = $this->getEntityManager()->getConnection($this->filterConfig->get('datasource'))->query(self::METHOD_GET, $model, 'listminimal', $params);
 
             $this->saveToCache($list);
         }

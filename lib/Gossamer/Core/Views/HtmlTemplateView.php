@@ -61,7 +61,12 @@ class HtmlTemplateView extends AbstractView
 //    echo $this->template;
 //        die;
 
-        
+
+        $viewConfig = $this->loadViewConfig();
+        $siteConfig = $this->loadConfig($this->httpRequest->getSiteParams()->getConfigPath() . 'config.yml');
+
+        //replace any remaining #theme# tags
+        $this->template = str_replace('#theme#', "/themes/" . $siteConfig['theme'][$viewConfig['themetype']], $this->template);
         ob_start();
         (eval("?>" . $this->template));
         $result = ob_get_clean();
@@ -71,7 +76,9 @@ class HtmlTemplateView extends AbstractView
 
     private function loadTemplate() {
         $viewConfig = $this->loadViewConfig();
+
         $siteConfig = $this->loadConfig($this->httpRequest->getSiteParams()->getConfigPath() . 'config.yml');
+
         $this->template = $viewConfig['template'];
         $this->sections = $viewConfig['sections'];
         $this->jsIncludeFiles = array_key_exists('javascript', $viewConfig) ? $viewConfig['javascript'] : array();
@@ -245,6 +252,8 @@ class HtmlTemplateView extends AbstractView
         foreach ($list as $file) {
             $cssIncludeString .= "<link href=\"$file\" rel=\"stylesheet\">\r\n";
         }
+
+
 
         $this->template = str_replace('<!---css--->', $cssIncludeString, $this->template);
     }

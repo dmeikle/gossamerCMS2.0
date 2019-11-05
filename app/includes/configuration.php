@@ -34,7 +34,7 @@ $sitePath = str_replace('/app/includes', '', $sitePath) . DIRECTORY_SEPARATOR;
 
 define('__SITE_PATH', $sitePath);
 define('__CACHE_DIRECTORY', $sitePath . '/app/cache');
-define('__DEBUG_OUTPUT_PATH', '/var/www/philanthropi/logs/debug.log');
+define('__DEBUG_OUTPUT_PATH', '/var/www/guitartommys.com/2020/logs/debug.log');
 define('__CONFIG_PATH', $sitePath . '/app/config/');
 
 //now onto includes/init.php

@@ -42,7 +42,7 @@ class KernelRunner implements KernelRunnerInterface
         if(isset($nodeConfig[$this->httpRequest->getRequestParams()->getYmlKey()]['mocked']) && $nodeConfig[$this->httpRequest->getRequestParams()->getYmlKey()]['mocked'] == 'true') {
             $componentName = '\Gossamer\Core\MVC\MockedComponent';
         }
-       
+
         $controllerName = $nodeConfig[$this->httpRequest->getRequestParams()->getYmlKey()]['defaults']['controller'];
         $modelName = $nodeConfig[$this->httpRequest->getRequestParams()->getYmlKey()]['defaults']['model'];
         $viewName = $nodeConfig[$this->httpRequest->getRequestParams()->getYmlKey()]['defaults']['view'];
