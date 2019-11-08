@@ -73,7 +73,7 @@ class CacheManager implements CachingInterface
      * @return boolean
      */
     public function retrieveFromCache($key, $static = false) {
-       
+
         //in case the developer has added a subfolder, we need to know this
         $path = $this->buildCompletePath($this->getCacheDirectory(), $key);
         $key = $this->parseKey($key);

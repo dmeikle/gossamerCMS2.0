@@ -24,8 +24,13 @@ class AbstractCachableFilter extends AbstractFilter
 
     public function retrieveFromCache() {
         $key = $this->filterConfig->get('cacheKey');
+        $result = $this->container->get('CacheManager')->retrieveFromCache($key);
 
-        return $this->container->get('CacheManager')->retrieveFromCache($key);
+        if(!is_array($result) || count($result) == 0) {
+            return false;
+        }
+
+        return $result;
     }
 
     public function saveToCache($values, $key = null) {

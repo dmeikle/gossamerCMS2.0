@@ -27,7 +27,9 @@ class SaveCommand extends AbstractCommand
     use DocumentPreparationTrait;
 
     public function execute($params = array(), $requestParams = array())
-    { 
+    {
+
+        file_put_contents(__DEBUG_OUTPUT_PATH, "saving\r\n", FILE_APPEND);
         file_put_contents(__DEBUG_OUTPUT_PATH, "params\r\n". print_r($requestParams, true), FILE_APPEND);
         
         $this->prepare($this->entity, $requestParams);
