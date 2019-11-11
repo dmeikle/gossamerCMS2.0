@@ -32,7 +32,7 @@ class ListAllFilter extends AbstractFilter
         );
         $modelName = $this->filterConfig->get('model');
 
-        $list = $this->getEntityManager()->getConnection('datasource1')->query(self::METHOD_GET, new $modelName($request, $response, $this->container->get('Logger')), 'listminimal', $params);
+        $list = $this->getEntityManager()->getConnection($this->filterConfig->get('datasource'))->query(self::METHOD_GET, new $modelName($request, $response, $this->container->get('Logger')), 'listminimal', $params);
 
         //map it to a new unique key
         $response->setAttribute($this->filterConfig->get('key'), $list[$this->filterConfig->get('dbkey')]);

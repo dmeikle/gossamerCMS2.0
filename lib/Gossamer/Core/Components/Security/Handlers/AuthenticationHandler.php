@@ -21,7 +21,9 @@ use Gossamer\Core\Configuration\YamlLoader;
 use Gossamer\Core\Routing\URISectionComparator;
 use Gossamer\Core\Services\ParametersInterface;
 use Gossamer\Caching\CacheManager;
+use Gossamer\Horus\Http\HttpAwareInterface;
 use Gossamer\Horus\Http\HttpRequest;
+use Gossamer\Horus\Http\HttpResponse;
 use Gossamer\Neith\Logging\LoggingInterface;
 use Gossamer\Set\Utils\Container;
 
@@ -90,10 +92,15 @@ use Gossamer\Set\Utils\Container;
  *
  * @author Dave Meikle
  */
-class AuthenticationHandler extends \Gossamer\Ra\Security\Handlers\AuthenticationHandler implements ParametersInterface
+class AuthenticationHandler extends \Gossamer\Ra\Security\Handlers\AuthenticationHandler implements ParametersInterface, HttpAwareInterface
 {
 
     use \Gossamer\Core\Configuration\Traits\LoadConfigurationTrait;
+
+    protected $httpRequest;
+
+    protected $httpResponse;
+
 
 
     private $loader = null;
@@ -142,7 +149,8 @@ class AuthenticationHandler extends \Gossamer\Ra\Security\Handlers\Authenticatio
            // print_r($e->getMessage());
 
             if (array_key_exists('fail_url', $this->node)) {
-                header('Location: ' . $this->container->get('HttpRequest')->getRequestParams()->getSiteUrl() . $this->node['fail_url']);
+                header('Location: ' . $this->httpRequest->getRequestParams()->getSiteUrl() . $this->node['fail_url']);
+                exit;
             } else {
                 //echo json_encode(array('message' => $e->getMessage(), 'code' => $e->getCode()));
                 $result = array('data' => json_encode(array('message' => $e->getMessage(), 'code' => $e->getCode())),
@@ -152,12 +160,23 @@ class AuthenticationHandler extends \Gossamer\Ra\Security\Handlers\Authenticatio
 
         }
 
+        if (array_key_exists('success_url', $this->node)) {
+
+            try {
+                header('Location: ' . $this->httpRequest->getRequestParams()->getSiteUrl() . $this->node['success_url']);
+            }catch(\Exception $e) {
+                echo $e->getMessage();
+            }
+            exit;
+        }
+
         //this is handled in the UserLoginManager
         //$this->container->set('securityContext', $this->securityContext);
     }
+
     protected function buildHeaders() {
 
-        $headers = $this->container->get('HttpResponse')->getHeaders();
+        $headers = $this->httpResponse->getHeaders();
         $headers[] = 'Content-Type: application/json';
 
         return $headers;
@@ -242,11 +261,27 @@ class AuthenticationHandler extends \Gossamer\Ra\Security\Handlers\Authenticatio
     }
 
 //    protected function createCachedFirewallRules() {
-//        $this->loader->setFilePath($this->container->get('HttpRequest')->getSiteParams()->getConfigPath() . 'firewall.yml');
+//        $this->loader->setFilePath($this->>httpRequest->getSiteParams()->getConfigPath() . 'firewall.yml');
 //        $config = $this->loader->loadConfig();
-//        $parser = new URISectionComparator(new CacheManager($this->logger),$this->container->get('HttpRequest'));
-//        $key = $parser->findPattern($config, $this->container->get('HttpRequest')->getRequestParams()->getUri());
+//        $parser = new URISectionComparator(new CacheManager($this->logger),$this->>httpRequest);
+//        $key = $parser->findPattern($config, $this->>httpRequest->getRequestParams()->getUri());
 //
 //    }
+
+    public function setHttpRequest(HttpRequest $request)
+    {
+        $this->httpRequest = $request;
+    }
+
+    public function setHttpResponse(HttpResponse $response)
+    {
+        $this->httpResponse = $response;
+    }
+
+    public function setLogger(LoggingInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
 
 }

@@ -28,77 +28,94 @@ class AsetHttpRequest extends HttpRequest
 
     public function __construct(HttpRequest $httpRequest) {
 
-        $this->httpRequest = $httpRequest;
+        $this->requestParams = $httpRequest->getRequestParams();
+        $this->nodeConfig = $httpRequest->getNodeConfig();
+        $this->attributes = $httpRequest->getAttributes();
+        $this->siteParams = $httpRequest->getSiteParams();
 
     }
 
     public function setUriParameters(array $uriParameters) {
-        $this->httpRequest->getRequestParams()->setUriParameters($uriParameters);
+        $this->requestParams->setUriParameters($uriParameters);
     }
 
     public function getQueryStringParameters() {
-        return $this->httpRequest->getRequestParams()->getQueryStringParameters();
+        return $this->requestParams->getQueryStringParameters();
     }
     public function getUriParameters() {
-        return $this->httpRequest->getRequestParams()->getUriParameters();
+        return $this->requestParams->getUriParameters();
     }
-    
+
     public function setQueryStringParameters(array $params) {
 
-        return $this->httpRequest->getRequestParams()->setQueryStringParameters($params);
+        return $this->requestParams->setQueryStringParameters($params);
     }
-
-    public function setQueryString(array $queryString) {
-        $this->getRequestParams()->setQuerystring($queryString);
-    }
-
-    public function getQueryString() {
-        return $this->getRequestParams()->getQuerystring();
-    }
-    public function getMethod(){
-        return $this->httpRequest->getRequestParams()->getMethod();
-    }
-
-    public function getYmlKey() {
-        return $this->httpRequest->getRequestParams()->getYmlKey();
-    }
-
-    public function getSiteParams() {
-        return $this->httpRequest->getSiteParams();
-    }
-
-    public function getRequestParams(){
-        return $this->httpRequest->getRequestParams();
-    }
-
-    public function setRequestParams(RequestParams $requestParams){
-        $this->httpRequest->setRequestParams($requestParams);
-    }
-
-    public function setPostParameter($key, $value) {
-        $this->httpRequest->setPostParameter($key, $value);
-    }
-
+//
+//    public function setQueryString(array $queryString) {
+//        $this->getRequestParams()->setQuerystring($queryString);
+//    }
+//
+//    public function getQueryString() {
+//        return $this->getRequestParams()->getQuerystring();
+//    }
+//    public function getMethod(){
+//        return $this->httpRequest->getRequestParams()->getMethod();
+//    }
+//
+//    public function getYmlKey() {
+//        return $this->httpRequest->getRequestParams()->getYmlKey();
+//    }
+//
+//    public function getSiteParams() {
+//        return $this->httpRequest->getSiteParams();
+//    }
+//
+//    public function getRequestParams(){
+//        return $this->httpRequest->getRequestParams();
+//    }
+//
+//    public function setRequestParams(RequestParams $requestParams){
+//        $this->httpRequest->setRequestParams($requestParams);
+//    }
+//
+//    public function setPostParameter($key, $value) {
+//        $this->httpRequest->setPostParameter($key, $value);
+//    }
+//
     public function setPost(array $post) {
-        $this->httpRequest->getRequestParams()->setPost($post);
+        $this->requestParams->setPost($post);
     }
 
     public function getPost() {
-        return $this->httpRequest->getRequestParams()->getPost();
+        return $this->requestParams->getPost();
     }
-
-    /**
-     * @return mixed
-     */
-    public function getNodeConfig() {
-        return $this->httpRequest->getNodeConfig();
-    }
-
-    /**
-     * @param mixed $nodeConfig
-     * @return HttpRequest
-     */
-    public function setNodeConfig(&$nodeConfig) {
-        $this->httpRequest->setNodeConfig($nodeConfig);
-    }
+//
+//    public function getAttributes()
+//    {
+//        return $this->httpRequest->getAttributes();
+//    }
+//
+//    public function getAttribute($key)
+//    {
+//        return $this->httpRequest->getAttribute($key);
+//    }
+//    public function setAttribute($key, $value)
+//    {
+//        $this->httpRequest->setAttribute($key, $value);
+//    }
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getNodeConfig() {
+//        return $this->httpRequest->getNodeConfig();
+//    }
+//
+//    /**
+//     * @param mixed $nodeConfig
+//     * @return HttpRequest
+//     */
+//    public function setNodeConfig(&$nodeConfig) {
+//        $this->httpRequest->setNodeConfig($nodeConfig);
+//    }
 }

@@ -18,7 +18,6 @@
 namespace Gossamer\Ra\Security\Services;
 
 
-use Gossamer\Horus\EventListeners\Event;
 use Gossamer\Ra\Exceptions\ClientCredentialsNotFoundException;
 use Gossamer\Ra\Security\Managers\AuthenticationManager;
 use Gossamer\Ra\Security\SecurityContextInterface;
@@ -32,12 +31,15 @@ class AuthenticationService
     public function __construct(AuthenticationManager $authenticationManager, SecurityContextInterface $securityContext) {
         $this->authenticationManager = $authenticationManager;
         $this->securityContext = $securityContext;
+
     }
 
     public function execute() {
 
         try {
+
             $this->authenticationManager->authenticate($this->securityContext);
+
         }catch(ClientCredentialsNotFoundException $e) {
 
            renderResult(array(

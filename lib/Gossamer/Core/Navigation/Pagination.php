@@ -51,20 +51,29 @@ class Pagination {
         $retval = array();
         $numPages = $this->getNumPages();
         $currentEstablished = false;
+        $prev = array();
+        $next = array();
 
         for ($i = 0; $i < $this->getNumPages(); $i++) {
             $dataOffset = ($i * $limit);
             $item = array("offset" => "$dataOffset", "limit" => $limit);
+
+            //we've found our 'current' so let's get our 'next' on this iteration
+            if($currentEstablished && count($next) == 0) {
+                $next = $item;
+            }
             if (!$currentEstablished && $offset <= $dataOffset) {
                 $item["current"] = 'current';
                 $currentEstablished = true;
+                //make the previous retval index our 'prev' link
+                $prev = end($retval);
             } else {
                 $item["current"] = "";
             }
             $retval[] = $item;
         }
 
-        return $retval;
+        return array('index' => $retval, 'prev' => $prev, 'next' => $next);
     }
 
     /**

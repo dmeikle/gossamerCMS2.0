@@ -163,7 +163,7 @@ if(!is_null($httpResponse->getAttribute(\Gossamer\Horus\Filters\FilterChain::IMM
 if (file_exists($httpRequest->getSiteParams()->getSitePath() . $nodeConfig['componentPath'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'listeners.yml')) {
     $requestListenersConfig = loadConfig($httpRequest->getSiteParams()->getSitePath() . $nodeConfig['componentPath'] . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'listeners.yml');
     try {
-        if (array_key_exists($httpRequest->getRequestParams()->getYmlKey(), $requestListenersConfig)) {
+        if (!is_null($requestListenersConfig) && array_key_exists($httpRequest->getRequestParams()->getYmlKey(), $requestListenersConfig)) {
             $eventDispatcher->setConfiguration($requestListenersConfig[$httpRequest->getRequestParams()->getYmlKey()]);
 
             $result = $filterService->filterRequest($httpRequest, $httpResponse);

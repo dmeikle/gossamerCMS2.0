@@ -19,9 +19,11 @@ namespace Gossamer\Core\Components\Security\Traits;
 
 
 use Gossamer\Core\Components\Security\Core\Client;
+use Gossamer\Core\Components\Security\Managers\AuthenticationManager;
 use Gossamer\Horus\Http\HttpRequest;
 use Gossamer\Horus\Http\Traits\ClientIPAddressTrait;
 use Gossamer\Ra\Security\SecurityToken;
+use lib\Gossamer\Core\Components\Security\Core\AnonymousClient;
 
 //use extensions\textlogin\security\Client;
 
@@ -50,7 +52,7 @@ trait GetLoggedInMemberTrait {
 
             }
 
-            return null;
+            return new AnonymousClient();
         }
 
         return $token->getClient();

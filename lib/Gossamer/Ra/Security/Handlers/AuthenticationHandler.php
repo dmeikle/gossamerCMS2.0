@@ -110,6 +110,7 @@ abstract class AuthenticationHandler  {
      * @return type
      */
     public function execute() {
+
         $this->container->set('securityContext', $this->securityContext);
 
         if (is_null($this->node) || !array_key_exists('authentication', $this->node)) {
@@ -125,7 +126,8 @@ abstract class AuthenticationHandler  {
 
         
         try {
-           
+           echo 'here';
+           echo '1';
             $this->authenticationManager->authenticate($this->securityContext);
         } catch (\Exception $e) {
 
@@ -139,6 +141,10 @@ abstract class AuthenticationHandler  {
             die();
         }
 
+        if(array_key_exists('success_url', $this->node)) {
+            header('Location: ' . $this->getSiteURL() . $this->node['success_url']);
+            die;
+        }
         //this is handled in the UserLoginManager
         //$this->container->set('securityContext', $this->securityContext);
     }

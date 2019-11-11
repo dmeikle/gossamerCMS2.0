@@ -17,6 +17,7 @@
 
 namespace Gossamer\Ra\Security\Managers;
 
+use Gossamer\Horus\Http\Traits\ClientIPAddressTrait;
 use Gossamer\Neith\Logging\LoggingInterface;
 use Gossamer\Horus\Http\HttpRequest;
 use Gossamer\Horus\Http\HttpResponse;
@@ -44,6 +45,8 @@ abstract class AuthenticationManager
 {
 
     use \Gossamer\Set\Utils\ContainerTrait;
+
+    use ClientIPAddressTrait;
 
     protected $logger;
 
@@ -81,13 +84,13 @@ abstract class AuthenticationManager
         try {
             $client = $this->userAuthenticationProvider->loadClientByCredentials($token->getClient());
 
+
             $post = $this->request->getRequestParams()->getPost();
             if(array_key_exists('password', $post)) {
                 if(!$this->comparePasswords($post['password'], $this->getClientPassword($client))) {
                     throw new ClientCredentialsNotFoundException('Client not found with provided credentials');
                 }
             }
-
 
 
             //this was a fix in a child class - may be needed here
@@ -107,6 +110,7 @@ abstract class AuthenticationManager
         }
 
         setSession('_security_secured_area', serialize($token));
+
     }
 
 

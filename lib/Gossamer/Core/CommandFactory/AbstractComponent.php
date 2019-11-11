@@ -18,9 +18,9 @@
 namespace Gossamer\Core\CommandFactory;
 
 
+use Gossamer\Core\CommandFactory\Exceptions\HandlerNotCallableException;
 use Gossamer\Horus\Http\HttpRequest;
 use Gossamer\Horus\Http\HttpResponse;
-use Gossamer\Core\MVC\exceptions\HandlerNotCallableException;
 use Gossamer\Neith\Logging\LoggingInterface;
 
 /**
@@ -69,7 +69,7 @@ class AbstractComponent
 
         //if it throws an exception we are catching it in the calling Kernel
         if (is_callable($handler)) {
-            
+
             $document = new $this->documentName();
             $command = new $this->commandName($document,  $this->logger, $httpRequest, $httpResponse, $this->container->get('EntityManager'));
             $command->setContainer($this->container);
@@ -77,7 +77,7 @@ class AbstractComponent
             return $command->execute($httpRequest->getRequestParams()->getQueryStringParameters(), $httpRequest->getRequestParams()->getPost());
         } else {
             error_log(print_r($handler, true));
-            throw new HandlerNotCallableException('unable to match method execute() to controller with key: ' . $httpRequest->getRequestParams()->getYmlKey());
+            throw new HandlerNotCallableException('unable to match method execute() to command with key: ' . $httpRequest->getRequestParams()->getYmlKey());
         }
     }
 

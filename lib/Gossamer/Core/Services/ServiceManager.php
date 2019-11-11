@@ -18,6 +18,7 @@
 namespace Gossamer\Core\Services;
 
 use Gossamer\Core\Datasources\DatasourceInterface;
+use Gossamer\Horus\Http\HttpAwareInterface;
 use Gossamer\Horus\Http\HttpRequest;
 use Gossamer\Horus\Http\HttpResponse;
 use Gossamer\Neith\Logging\LoggingInterface;
@@ -128,8 +129,11 @@ error_log($className);
 
         if ($class instanceof HttpAwareInterface) {
 
-            $class->setHttpRequest($this->container->get('HttpRequest'));
-            $class->setHttpResponse($this->container->get('HttpResponse'));
+//            $class->setHttpRequest($this->container->get('HttpRequest'));
+//            $class->setHttpResponse($this->container->get('HttpResponse'));
+
+            $class->setHttpRequest($this->httpRequest);
+            $class->setHttpResponse($this->httpResponse);
             $class->setLogger($this->logger);
         }
 

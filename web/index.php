@@ -2,6 +2,9 @@
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+//out this here so we can have debug output and still write custom headers
+ob_start();
+
 //phpinfo();
 //die('done');
 session_start();

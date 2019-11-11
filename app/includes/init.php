@@ -125,13 +125,16 @@ function super_unset($item) {
     $item = null;
 }
 
-function renderResult(array $result) {
+function renderResult(array $result, array $headers = array(), array $cookies = array()) {
 
-    if (array_key_exists('headers', $result)) {
-        foreach ($result['headers'] as $header) {
-            header($header);
-        }
+    foreach ($headers as $header) {
+        header($header);
     }
+    foreach($cookies as $key => $cookie) {
+
+        setcookie($key, $cookie);
+    }
+
     if (!array_key_exists('data', $result)) {
         die('no response generated');
     }
@@ -148,6 +151,8 @@ function renderErrorResult(\Exception $e) {
 
 function getSession($key = null) {
     $session = $_SESSION;
+
+
     if (!is_array($session)) {
         $session = array();
     }
@@ -157,6 +162,7 @@ function getSession($key = null) {
     if (!array_key_exists($key, $session)) {
         return null;
     }
+
     return fixObject($session[$key]);
 }
 

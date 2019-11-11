@@ -55,7 +55,7 @@ class BootstrapLoader
 
         $requestParams->setHeaders(getallheaders());
         $requestParams->setPost($this->convertJson($this->getPost()));
-        $requestParams->setQuerystring(($_GET));
+        $requestParams->setQuerystring($this->getFormattedParameterNames());
         $requestParams->setServer($_SERVER);
         $requestParams->setLayoutType($this->getLayoutType());
         $requestParams->setMethod($this->initMethod());
@@ -65,6 +65,24 @@ class BootstrapLoader
         return $requestParams;
     }
 
+    /**
+     * Because of the nature of rest calls variables with a '.' (eg:BillingAddress.email) need
+     * to be converted to '_dot_'. This is where we convert them back to usable format.
+     *
+     * @return array
+     */
+    private function getFormattedParameterNames() {
+        $retval = array();
+        foreach($_GET as $key => $value) {
+            if(strpos($key, '_dot_') !== false) {
+                $retval[str_replace('_dot_', '.', $key)] = $value;
+            }else{
+                $retval[$key] = $value;
+            }
+        }
+
+        return $retval;
+    }
     /**
      * @return mixed
      *

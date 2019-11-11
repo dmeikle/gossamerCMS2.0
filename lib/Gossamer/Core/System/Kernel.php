@@ -78,7 +78,7 @@ class Kernel
         /**
          * now we dump the response to the page
          */
-        renderResult($result);
+        renderResult($result, $this->httpResponse->getHeaders(), $this->httpResponse->getCookies());
     }
 
     private function getKernelRunner() {

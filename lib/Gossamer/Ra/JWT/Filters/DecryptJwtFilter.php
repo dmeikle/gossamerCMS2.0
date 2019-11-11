@@ -24,6 +24,7 @@ use Gossamer\Horus\Filters\AbstractFilter;
 use Gossamer\Horus\Filters\FilterChain;
 use Gossamer\Horus\Http\HttpRequest;
 use Gossamer\Horus\Http\HttpResponse;
+use Gossamer\Pesedget\Extensions\Couchbase\Exceptions\KeyNotFoundException;
 use Gossamer\Ra\Exceptions\TokenExpiredException;
 use Gossamer\Ra\JWT\TokenManager;
 use Gossamer\Ra\Security\SecurityToken;
@@ -45,7 +46,8 @@ class DecryptJwtFilter extends AbstractFilter
 
         try{
 
-            $jwt = $this->getJwtHeader();
+           // $jwt = $this->getJwtHeader();
+            $jwt = $this->getJwtCookie();
 
             $manager = new TokenManager($this->httpRequest);
 
@@ -54,8 +56,9 @@ class DecryptJwtFilter extends AbstractFilter
             $_SESSION = $item;
         }catch(KeyNotSetException $e) {
             //if we're coming from a login we may not have a JWT yet so perhaps don't kill the request just yet
-
+//die('KeyNotSetException');
             //let's create a cache ID manually
+
             $this->setCacheId();
         }catch(TokenExpiredException $e) {
 
@@ -84,6 +87,13 @@ class DecryptJwtFilter extends AbstractFilter
 
     }
 
+    private function getJwtCookie() {
+        if(array_key_exists('Authorization', $_COOKIE)) {
+            return $_COOKIE['Authorization'];
+        }
+
+        throw new KeyNotSetException();
+    }
 
     /**
      * all we needed from the JWT is the cache ID...

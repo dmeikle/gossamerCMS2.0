@@ -26,7 +26,7 @@ use Gossamer\Horus\Http\HttpResponse;
 class SerializeSessionLocallyFilter extends AbstractFilter
 {
     public function execute(HttpRequest &$request, HttpResponse &$response, FilterChain &$chain) {
-        
+
         $cacheManager = $this->container->get('CacheManager');
 
         $cacheManager->saveToCache($this->getKey(),serialize($_SESSION));
@@ -37,6 +37,7 @@ class SerializeSessionLocallyFilter extends AbstractFilter
 
     private function getKey() {
         $id = getSession('CACHE_ID');
+
         return $this->filterConfig->get('cacheKey') . DIRECTORY_SEPARATOR . $id;
     }
 }

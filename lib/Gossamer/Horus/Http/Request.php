@@ -17,19 +17,22 @@ namespace Gossamer\Horus\Http;
  */
 abstract class Request implements HttpInterface{
     
-    private $attributes = array();
+    protected $attributes = array();
 
     protected $headers = array();
-    
+
+    protected $siteParams;
+
     public function setAttribute($key, $value) {
         $this->attributes[$key] = $value;
     }
     
     public function getAttribute($key) {
         if(!array_key_exists($key, $this->attributes)) {
+
             return null;
         }
-        
+
         return $this->attributes[$key];
     }
 

@@ -17,6 +17,9 @@ abstract class Response implements HttpInterface
 
     protected $headers = array();
 
+    protected $cookies = array();
+
+
     public function setAttribute($key, $value) {
         $this->attributes[$key] = $value;
     }
@@ -39,5 +42,13 @@ abstract class Response implements HttpInterface
 
     public function removeAttribute($key) {
         unset($this->attributes[$key]);
+    }
+
+    public function setCookie($key, $value) {
+        $this->cookies[$key] = $value;
+    }
+
+    public function getCookies() {
+        return $this->cookies;
     }
 }

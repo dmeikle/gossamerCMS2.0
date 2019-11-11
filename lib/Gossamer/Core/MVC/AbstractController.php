@@ -82,10 +82,12 @@ abstract class AbstractController
      * @return array
      */
     public function index() {
+
         $result = $this->model->index(array('data' => ''));
         if(!array_key_exists('data', $result)) {
             $result['data'] = '';
         }
+
         return $this->render($result);
     }
 
@@ -214,7 +216,7 @@ abstract class AbstractController
         if (!is_null($id) && !array_key_exists('id', $post)) {
             $post['id'] = $id;
         }
-
+        $post = $this->addCustomSaveParams($post);
         $result = $this->model->save($post);
 
         $params = array('entity' => $this->model->getEntity(true), 'result' => $result, 'id' => $id);
@@ -228,6 +230,17 @@ abstract class AbstractController
         }
         
         return $this->render($result);
+    }
+
+    private function addCustomSaveParams(array $post) {
+        $nodeConfig = $this->httpRequest->getNodeConfig();
+        if(array_key_exists('saveParams', $nodeConfig)) {
+            foreach($nodeConfig['saveParams'] as $key => $value) {
+                $post[$key] = $value;
+            }
+        }
+
+        return $post;
     }
 
     /**

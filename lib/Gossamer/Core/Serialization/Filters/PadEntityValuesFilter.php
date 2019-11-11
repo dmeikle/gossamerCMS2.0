@@ -44,5 +44,15 @@ class PadEntityValuesFilter extends AbstractFilter
         $serializer->padEntityValues($data[$this->filterConfig->get('entity')]);
 
         $this->httpRequest->setAttribute('REQUEST_RESULT_DATA', $data);
+
+        if($this->filterConfig->get('responseKey') != null ) {
+            $response->setAttribute($this->filterConfig->get("responseKey"), $data[$this->filterConfig->get('entity')]);
+        }
+
+        try {
+            return $chain->execute($request, $response, $chain);
+        } catch (\Exception $e) {
+
+        }
     }
 }

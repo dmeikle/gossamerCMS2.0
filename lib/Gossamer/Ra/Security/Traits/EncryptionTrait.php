@@ -91,7 +91,7 @@ trait EncryptionTrait
         $jsonConverter = new StandardConverter();
         $serializerManager = JWESerializerManager::create([new CompactSerializer($jsonConverter)]);
 
-        $jwe = $serializerManager->unserialize($data);
+        $jwe = $serializerManager->unserialize(substr($data,4));
 
         $jweDecrypter->decryptUsingKey($jwe, $jwk, 0);
 
