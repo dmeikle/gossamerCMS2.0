@@ -7,7 +7,7 @@ ob_start();
 
 //phpinfo();
 //die('done');
-session_start();
+
 
 ini_set('default_charset', 'UTF-8');
 

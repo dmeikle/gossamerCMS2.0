@@ -45,15 +45,26 @@ class DecryptJwtFilter extends AbstractFilter
     public function execute(HttpRequest &$request, HttpResponse &$response, FilterChain &$chain) {
 
         try{
-
+echo "decrypt filter<br>getting jwt cookie<br>";
            // $jwt = $this->getJwtHeader();
-            $jwt = $this->getJwtCookie();
-
+            $jwt = null;
+            try {
+                $jwt = $this->getJwtCookie();
+            }catch(\Exception $e) {
+                echo "exception<BR>";
+                die($e->getMessage());
+            }
+            echo "<br>decrypted jwt $jwt<br>";
+//$jwt='JWT eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiemlwIjoiREVGIn0.d-tGrBsXpTdnUr-t4CJBQaD72H7WnlEOrHQZedUU15ceWUIqHv-WTBE_RVp-VFco6hB78qU9saLDTx76YL76CAJCUv8wUNWf.lqzdFgGM5tkrJDsH7gBryQ.wy5YwTvDcCbtXAO_wbOIXTxRivJ14uTcacEXidxUcqV1iTz01YJMybimLwIt-sMambNP6kUJv1OPwosFRrBLBPnlr9dEPjDZVp0xWO-goCByrV5Bb43HXntVwRU-nLVA.vNX-3hwdNrM5QAa02j5fU5-FDcl6ULYf2e3GTmEUqi0';
             $manager = new TokenManager($this->httpRequest);
 
             $item = $manager->getDecryptedJwtToken($jwt);
+            echo "decrypt<br>";
+pr($item);
 
             $_SESSION = $item;
+            echo "session<br>";
+            pr($_SESSION);
         }catch(KeyNotSetException $e) {
             //if we're coming from a login we may not have a JWT yet so perhaps don't kill the request just yet
 //die('KeyNotSetException');

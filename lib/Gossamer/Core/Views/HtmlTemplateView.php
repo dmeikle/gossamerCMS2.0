@@ -35,14 +35,18 @@ class HtmlTemplateView extends AbstractView
     private $data;
 
     public function render($data = array()) {
+        //so we can access user info in display
+        $this->setClientToResponse();
         //get any preloaded items that are in the Response object
         $data = array_merge(is_null($data) ? array() : $data, $this->httpResponse->getAttributes());
+
 
         $this->loadTemplate();
 
         // The second parameter of json_decode forces parsing into an associative array
         //we extract to make data visible across the template
         extract(json_decode(json_encode($data), true));
+
 
         //include all files first
         $this->renderIncludes();
@@ -72,6 +76,18 @@ class HtmlTemplateView extends AbstractView
         $result = ob_get_clean();
 
         return array('data' => $result);
+    }
+
+    private function setClientToResponse()
+    {
+        if (!is_null($this->httpRequest->getAttribute('Client'))) {
+
+            $this->httpResponse->setAttribute('Client', $this->httpRequest->getAttribute('Client')->toArray());
+        }elseif(!is_null(getSession('_security_secured_area'))) {
+            $token = unserialize(getSession('_security_secured_area'));
+
+            $this->httpResponse->setAttribute('Client', $token->getClient()->toArray() );
+        }
     }
 
     private function loadTemplate() {

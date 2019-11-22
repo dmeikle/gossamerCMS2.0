@@ -35,7 +35,12 @@ class EncryptJwtFilter extends AbstractFilter
         $manager = new TokenManager($this->httpRequest);
         //$manager->setSession($_SESSION);
         $manager->add('CACHE_ID', $this->getId());
+        if(!is_null($request->getAttribute('Client'))) {
+            $manager->add('Client', $request->getAttribute('Client')->toArray());
+        }
+
         $jwt = $manager->getEncryptedJwtToken();
+
 
         $response->setHeader(self::KEY, self::IDENTIFIER . $jwt);
         $response->setAttribute(self::KEY, self::IDENTIFIER . $jwt);

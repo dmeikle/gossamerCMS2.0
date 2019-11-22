@@ -160,16 +160,20 @@ class AuthenticationHandler extends \Gossamer\Ra\Security\Handlers\Authenticatio
 
         }
 
+        setSession('_security_secured_area', serialize($this->securityContext->getToken()));
+
         if (array_key_exists('success_url', $this->node)) {
 
             try {
-                header('Location: ' . $this->httpRequest->getRequestParams()->getSiteUrl() . $this->node['success_url']);
+                //TODO: uncomment this
+                //header('Location: ' . $this->httpRequest->getRequestParams()->getSiteUrl() . $this->node['success_url']);
             }catch(\Exception $e) {
                 echo $e->getMessage();
             }
-            exit;
+            //TODO: uncomment this
+            // exit;
         }
-
+echo "auth complete";
         //this is handled in the UserLoginManager
         //$this->container->set('securityContext', $this->securityContext);
     }

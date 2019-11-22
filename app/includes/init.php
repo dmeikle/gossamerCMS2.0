@@ -43,7 +43,12 @@ $siteParams->setDebugOutputPath('/var/www/binghan/logs/rest4_debug.log');
 $siteParams->setIsCaching(true);
 $siteParams->setSiteConfig(loadConfig($siteParams->getConfigPath() . 'config.yml'));
 
-
+/**
+ * now that we've included everything start the session before firing filters.
+ * starting it now (after the includes) avoids '__PHP_Incomplete_Class' errors in the session object
+ * since we've autoloaded everything before instantiating them from session
+ */
+session_start();
 //file_put_contents(__DEBUG_OUTPUT_PATH, print_r($container->get('EntityManager')));
 
 function pr($item) {
@@ -128,6 +133,7 @@ function super_unset($item) {
 function renderResult(array $result, array $headers = array(), array $cookies = array()) {
 
     foreach ($headers as $header) {
+
         header($header);
     }
     foreach($cookies as $key => $cookie) {

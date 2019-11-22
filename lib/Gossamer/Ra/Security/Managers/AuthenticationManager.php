@@ -97,7 +97,7 @@ abstract class AuthenticationManager
            // $token = $this->generateNewToken(new Client($client));
             $token = $this->generateNewToken($client);
 
-           
+
         } catch (ClientCredentialsNotFoundException $e) {
 
             $this->logger->addAlert('Client not found ' . $e->getMessage());
@@ -110,7 +110,7 @@ abstract class AuthenticationManager
         }
 
         setSession('_security_secured_area', serialize($token));
-
+        $this->request->setAttribute("Client", $client);
     }
 
 
