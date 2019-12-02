@@ -156,7 +156,7 @@ abstract class AbstractController
      * @param int offset    database page to start at
      * @param int limit     max rows to return
      */
-    public function listallReverse($offset = 0, $limit = 20) {
+    public function listallReverse($offset = 0, $limit = 20, $customVerb = null) {
         $params = $this->httpRequest->getRequestParams()->getQueryStringParameters();
         $params['directive::OFFSET'] = $offset;
         $params['directive::LIMIT'] = $limit;
@@ -168,7 +168,7 @@ abstract class AbstractController
             $params['directive::DIRECTION'] = $params['direction'];
             unset($params['direction']);
         }
-        $result = $this->model->listallReverse($offset, $limit, null, $params);
+        $result = $this->model->listallReverse($offset, $limit, $customVerb, $params);
      
 
         if (is_array($result) && array_key_exists($this->model->getEntity() . 'sCount', $result)) {
