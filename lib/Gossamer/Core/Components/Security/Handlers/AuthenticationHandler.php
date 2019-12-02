@@ -173,7 +173,7 @@ class AuthenticationHandler extends \Gossamer\Ra\Security\Handlers\Authenticatio
             //TODO: uncomment this
             // exit;
         }
-echo "auth complete";
+
         //this is handled in the UserLoginManager
         //$this->container->set('securityContext', $this->securityContext);
     }

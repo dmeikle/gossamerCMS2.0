@@ -47,7 +47,7 @@ $eventDispatcher = $dispatchService->getEventDispatcher(loadConfig($siteParams->
 
 
 //run through our filters to see if we qualify the request to continue
-$filterService = new Gossamer\Horus\Filters\FilterDispatcher($logger);
+$filterService = new Gossamer\Horus\Filters\FilterDispatcher($logger, $httpRequest->getRequestParams()->getMethod());
 $filterService->setContainer($container);
 
 //execute any entrypoint filters

@@ -23,7 +23,10 @@ use Gossamer\Aset\Validation\Factory\FlyweightValidatorInterface;
 class MaskedStringValidator extends AbstractValidator implements FlyweightValidatorInterface
 {
 
-    public function validate($value) {
-        // TODO: Implement validate() method.
+
+
+    public function validate($value)
+    {
+        return preg_match($this->regex, $value);
     }
 }

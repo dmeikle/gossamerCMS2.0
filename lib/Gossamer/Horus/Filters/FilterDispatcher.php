@@ -35,9 +35,12 @@ class FilterDispatcher
 
     private $container;
 
-    public function __construct(LoggingInterface $logger) {
+    private $httpMethod;
+
+    public function __construct(LoggingInterface $logger, $httpMethod) {
         $this->filterChain = new FilterChain();
         $this->logger = $logger;
+        $this->httpMethod = $httpMethod;
     }
 
     public function setContainer(Container $container) {
@@ -51,6 +54,11 @@ class FilterDispatcher
     public function setFilters(array $filterConfig) {
 
         foreach ($filterConfig as $filterParams) {
+
+            //if it's not a matching http method skip this filter
+            if(array_key_exists('method', $filterParams) && $filterParams['method'] != $this->httpMethod) {
+                continue;
+            }
             $this->addFilter($filterParams);
         }
     }
@@ -102,6 +110,7 @@ class FilterDispatcher
      * output the response
      */
     public function filterRequest(HttpRequest &$request, HttpResponse &$response) {
+
         try {
             
             $result = $this->filterChain->execute($request, $response, $this->filterChain);

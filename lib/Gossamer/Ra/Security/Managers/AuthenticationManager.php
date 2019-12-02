@@ -192,6 +192,7 @@ abstract class AuthenticationManager
     }
 
     protected function comparePasswords($password, $encrypted) {
+
         //used with password_hash("mynewpassword", PASSWORD_DEFAULT);
         return (password_verify($password, $encrypted));
     }

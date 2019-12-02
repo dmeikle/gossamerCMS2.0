@@ -65,7 +65,7 @@ abstract class AbstractValidator {
     protected function checkValidCharsAgainstString($value, $expression){
         
         //loop through the character array checking each character exists in the expression to validate against
-        for($i = 0; $i < count($chars); $i++) {
+        for($i = 0; $i < count($value); $i++) {
         	
             $char = $value[i];
 			

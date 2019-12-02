@@ -35,6 +35,7 @@ class FilterChain
 
     public function execute(HttpRequest &$request, HttpResponse &$response, FilterChain &$chain) {
         $filter = $this->next();
+        //echo "filter " . get_class($filter)."<br>";
         if($filter !== false) {
             //need to pass in for other methods deeper than the called method
             $filter->setHttpRequest($request);

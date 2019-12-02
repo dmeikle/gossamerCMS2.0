@@ -109,7 +109,7 @@ class AbstractFilter
     protected function setException(array $result) {
         $this->httpResponse->setAttribute(FilterChain::IMMEDIATE_WRITE, 'true');
 
-        $this->httpResponse->setHeader('Content-Type', 'application/json');
+        $this->httpResponse->setHeader('Content-Type', $this->filterConfig->get('content-type'));
         $this->httpResponse->setAttribute('data',json_encode($result));
     }
 }

@@ -41,6 +41,7 @@ class Validator
 
         return $this->factory;
     }
+
     /**
      * iterate the configuration looking for fields that need validating
      * @param array $postedParams
@@ -49,11 +50,14 @@ class Validator
     public function validateRequest(array $postedParams, $keepNestedResult = false) {
         $retval = array();
 
-        foreach ($this->config as $key => $fieldConfig) {
+        if(array_key_exists('fields', $this->config)) {
 
-            $validationResult = $this->validateField($key, $fieldConfig, $postedParams);
-            if($validationResult !== true) {
-                $retval[$key] = $validationResult;
+            foreach ($this->config['fields'] as $key => $fieldConfig) {
+
+                $validationResult = $this->validateField($key, $fieldConfig, $postedParams);
+                if ($validationResult !== true) {
+                    $retval[$key] = $validationResult;
+                }
             }
         }
 
@@ -64,12 +68,32 @@ class Validator
         return $retval;
     }
 
-    private function validateField($key, array &$fieldConfig, array &$postedParams) {
+
+    private function validateField($key, array &$fieldConfig, array $postedParams, $parent = null) {
+
+        //drill down if this is configured to expect a nested object value
+        if(!is_null($parent) && array_key_exists($parent, $postedParams)) {
+            $postedParams = $postedParams[$parent];
+        }
+
+        //break it down further if there's a '.'
+        //eg: BillingAddress.firstname becomes [BillingAddress][firstname]
+        if(strpos($key, '.') !== false) {
+            $pieces = explode('.', $key);
+            //key is the last item
+            $key = array_pop($pieces);
+            foreach($pieces as $piece) {
+                //drill down to what we're looking for
+                $postedParams = $postedParams[$piece];
+            }
+
+        }
         if(!array_key_exists($key, $postedParams)) {
             $postedParams[$key] = '';
         }
         //now iterate each validator and kick out if we fail
         foreach($fieldConfig as $item) {
+
             $validatorName = $item['class'];
             $params = array();
 
